@@ -83,21 +83,21 @@ PATIENT1,patient1_dwi.nii.gz,patient1.bval,patient1.bvec,,,,,patient1_revb0.nii.
 PATIENT2,patient2_dwi.nii.gz,patient2.bval,patient2.bvec,,,,,patient2_revb0.nii.gz,patient2_t1.nii.gz,patient2_wmparc.nii.gz,patient2_aparc+aseg.nii.gz,patient2_lesions.nii.gz
 ```
 
-| Column       | Description                                                                                                                                                                           |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`     | Name for the sample/subject that will be used to identify it in the pipeline through processing. Spaces in sample names are automatically converted to underscores (`_`).             |
-| `dwi`        | Input Diffusion Weighted Imaging 4D volume (.nii/.nii.gz).                                                                                                                            |
-| `bval`       | Input b-values (gradient weights) for each direction in the associated DWI 4D volume (.bval).                                                                                         |
-| `bvec`       | Input b-vectors (gradient directions) for each direction in the associated DWI 4D volume (.bvec).                                                                                     |
-| `sbref`      | Single-band acquired b0 reference for the DWI 4D volume (.nii/.nii.gz).                                                                                                               |
-| `rev_dwi`    | Reverse phase acquired Difusion Weighted Imaging 4D volume (.nii/.nii.gz).                                                                                                            |
-| `rev_bval`   | Input b-values (gradient weights) for each direction in the associated reverse phase acquired DWI 4D volume (.bval).                                                                  |
-| `rev_bvec`   | Input b-vectors (gradient directions) for each direction in the associated reverse phase acquired DWI 4D volume (.bvec).                                                              |
-| `rev_sbref`  | Single-band acquired b0 reference for the reverse phase acquired DWI 4D volume (.nii/.nii.gz).                                                                                        |
-| `t1`         | Anatomical T1-weighted volume (.nii/.nii.gz).                                                                                                                                         |
-| `wmparc`     | White Matter parcellation obtained from freesurfer (.nii/.nii.gz).                                                                                                                    |
-| `aparc_aseg` | Brain parcellation and segmentation obtained from freesurfer (.nii/.nii.gz).                                                                                                          |
-| `lesion`     | Lesions mask (.nii/.nii.gz).                                                                                                                                                          |
+| Column       | Description                                                                                                                                                               |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`     | Name for the sample/subject that will be used to identify it in the pipeline through processing. Spaces in sample names are automatically converted to underscores (`_`). |
+| `dwi`        | Input Diffusion Weighted Imaging 4D volume (.nii/.nii.gz).                                                                                                                |
+| `bval`       | Input b-values (gradient weights) for each direction in the associated DWI 4D volume (.bval).                                                                             |
+| `bvec`       | Input b-vectors (gradient directions) for each direction in the associated DWI 4D volume (.bvec).                                                                         |
+| `sbref`      | Single-band acquired b0 reference for the DWI 4D volume (.nii/.nii.gz).                                                                                                   |
+| `rev_dwi`    | Reverse phase acquired Difusion Weighted Imaging 4D volume (.nii/.nii.gz).                                                                                                |
+| `rev_bval`   | Input b-values (gradient weights) for each direction in the associated reverse phase acquired DWI 4D volume (.bval).                                                      |
+| `rev_bvec`   | Input b-vectors (gradient directions) for each direction in the associated reverse phase acquired DWI 4D volume (.bvec).                                                  |
+| `rev_sbref`  | Single-band acquired b0 reference for the reverse phase acquired DWI 4D volume (.nii/.nii.gz).                                                                            |
+| `t1`         | Anatomical T1-weighted volume (.nii/.nii.gz).                                                                                                                             |
+| `wmparc`     | White Matter parcellation obtained from freesurfer (.nii/.nii.gz).                                                                                                        |
+| `aparc_aseg` | Brain parcellation and segmentation obtained from freesurfer (.nii/.nii.gz).                                                                                              |
+| `lesion`     | Lesions mask (.nii/.nii.gz).                                                                                                                                              |
 
 An [example samplesheet](../assets/samplesheet_raw.csv) has been provided with the pipeline.
 
