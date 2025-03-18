@@ -84,7 +84,7 @@ workflow NF_TRACTOFLOW {
         RECONST_SHSIGNAL(
             RUN.out.dwi
                 .map{ it + [[]] }
-    )
+        )
 
     //
     // Collate and save software versions
