@@ -6,16 +6,16 @@
 
 ## BIDS input
 
-scilus/nf-tractoflow supports a **BIDS compliant dataset** in inputs, using the `--bids` parameter. Optionally, the `--fsbids` input
+scilus/nf-tractoflow supports a **BIDS compliant dataset** in inputs, using the `--input` parameter. Optionally, the `--fsbids` input
 parameter can be supplied to load a **freesurfer sidecar**, with precomputed parcellations and segmentations (`wmparc` and `aparc+aseg`).
-If the `--bidsignore` input is given, its content will be used to filter both `--bids` and `--fsbids`. Valid `--bids` and `--fsbids` inputs
-abide the following structure :
+If the `--bidsignore` input is given, its content will be used to filter both `--input` and `--fsbids`. Valid `--input` and `--fsbids`
+inputs abide the following structure :
 
 ```
     Assuming  ─>  FP : Forward Phase encoding
               ─>  RP : Reverse Phase encoding
 
-    --bids=/path/to/[bids]
+    --input=/path/to/[bids]
                       |
                       ├── S1
                       |   ├── dwi
@@ -99,7 +99,7 @@ PATIENT2,patient2_dwi.nii.gz,patient2.bval,patient2.bvec,,,,,patient2_revb0.nii.
 | `aparc_aseg` | Brain parcellation and segmentation obtained from freesurfer (.nii/.nii.gz).                                                                                              |
 | `lesion`     | Lesions mask (.nii/.nii.gz).                                                                                                                                              |
 
-An [example samplesheet](../assets/samplesheet_raw.csv) has been provided with the pipeline.
+An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
 ## Running the pipeline
 
@@ -112,7 +112,7 @@ nextflow run scilus/nf-tractoflow --input ./samplesheet.csv --outdir ./results  
 If using `bids` :
 
 ```bash
-nextflow run scilus/nf-tractoflow --bids ./samplesheet.csv --outdir ./results  -profile docker
+nextflow run scilus/nf-tractoflow --input /path/to/bids/database --outdir ./results  -profile docker
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.

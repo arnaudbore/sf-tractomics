@@ -11,19 +11,12 @@
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
             "help_text": "Specify input samplesheet and output directory",
-            "anyOf": [
-                {
-                    "required": ["input", "outdir"]
-                },
-                {
-                    "required": ["bids", "outdir"]
-                }
-            ],
+            "required": ["input", "outdir"],
             "properties": {
                 "input": {
                     "mimetype": "text/csv",
-                    "description": "Path to comma-separated file containing information about the input subjects files.",
-                    "help_text": "List of subjects to process. See `assets/samplesheet_raw.csv`.",
+                    "description": "Either a path to a BIDS database or to comma-separated file containing information about the input subjects files.",
+                    "help_text": "BIDS database or csv file containing a list of subjects to process. See `assets/samplesheet.csv`.",
                     "fa_icon": "fas fa-folder-open",
                     "exists": true,
                     "type": "string",

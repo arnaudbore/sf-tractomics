@@ -86,7 +86,7 @@ workflow PIPELINE_INITIALISATION {
         }
         else {
             ch_input_sheets = Channel
-                .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_raw_input.json"))
+                .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
                 .map{
                     meta, dwi, bval, bvec, sbref, rev_dwi, rev_bval, rev_bvec, rev_sbref, t1, wmparc, aparc_aseg, lesion ->
                         return [
