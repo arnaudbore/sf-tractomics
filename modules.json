@@ -72,7 +72,7 @@
                     },
                     "io/readbids": {
                         "branch": "main",
-                        "git_sha": "53e633db3898cb2265053c02bcac47fd3d2fda7b",
+                        "git_sha": "b7c3c2c1485d23ebaabeb552001c0d6a73134a50",
                         "installed_by": ["io_bids"]
                     },
                     "preproc/eddy": {
