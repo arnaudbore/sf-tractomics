@@ -140,6 +140,11 @@
                         "git_sha": "60e21b273653eec3b710b91562e714c74ef4d0c7",
                         "installed_by": ["anatomical_segmentation"]
                     },
+                    "stats/mergejson": {
+                        "branch": "quick-fixes",
+                        "git_sha": "fe7bdfb18f471fbb889f65d5bdc3fe399d669181",
+                        "installed_by": ["modules"]
+                    },
                     "stats/metricsinroi": {
                         "branch": "quick-fixes",
                         "git_sha": "f4abd9d52988b6e6f4e21483c7d53afb3d008bcd",
