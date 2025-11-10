@@ -109,38 +109,38 @@ workflow NF_TRACTOFLOW {
 
         // Apply the transformation to subject space to the bundles
         ch_iit_transform_bundles = TRACTOFLOW.out.b0
-            // .join(REGISTER_ATLAS_BUNDLES.out.warp)
-            // .join(REGISTER_ATLAS_BUNDLES.out.affine)
-            // .combine(BUNDLE_IIT.out.bundle_masks.toList())
-            // .map {
-            //     meta, b0, warp, affine, bundles ->
-            //         [meta, bundles, b0, warp, affine]
-            // }
-        // ch_iit_transform_bundles.view()
-        // TRANSFORM_ATLAS_BUNDLES(ch_iit_transform_bundles)
+            .join(REGISTER_ATLAS_BUNDLES.out.forward_image_transform)
+            .combine(BUNDLE_IIT.out.bundle_masks.toList())
+            .map {
+                meta, b0, transform, bundles ->
+                    [meta, bundles, b0, transform]
+            }
+        TRANSFORM_ATLAS_BUNDLES(ch_iit_transform_bundles)
+        ch_versions = ch_versions.mix(TRANSFORM_ATLAS_BUNDLES.out.versions)
 
         // Prepare volume ROI metric extraction
         // Start by collecting DTI metrics
-        // ch_input_volume_roistats = TRACTOFLOW.out.dti_fa
-        //     .join(TRACTOFLOW.out.dti_md)
-        //     .join(TRACTOFLOW.out.dti_rd)
-        //     .join(TRACTOFLOW.out.dti_ad)
+        ch_input_volume_roistats = TRACTOFLOW.out.dti_fa
+            .join(TRACTOFLOW.out.dti_md)
+            .join(TRACTOFLOW.out.dti_rd)
+            .join(TRACTOFLOW.out.dti_ad)
 
         //
         // EXTRACT ROI VOLUME STATISTICS
         //
         // Input: [meta, [metrics_list], [masks]]
 
-        // ch_input_volume_roistats = ch_input_volume_roistats
-        //     .map {tuple ->
-        //         def meta = tuple[0]
-        //         def metrics = tuple[1..-1]
-        //         return [meta, metrics]
-        //     }
-        //     .join(TRANSFORM_ATLAS_BUNDLES.out.warped_image.combine([]))
+        ch_input_volume_roistats = ch_input_volume_roistats
+            .map {tuple ->
+                def meta = tuple[0]
+                def metrics = tuple[1..-1]
+                return [meta, metrics]
+            }
+            .join(TRANSFORM_ATLAS_BUNDLES.out.warped_image)
+            .map { meta, metrics, bundles -> [meta, metrics, bundles, []]}
 
-        // STATS_METRICSINROI( ch_input_volume_roistats )
-        // ch_versions = ch_versions.mix(STATS_METRICSINROI.out.versions)
+        STATS_METRICSINROI( ch_input_volume_roistats )
+        ch_versions = ch_versions.mix(STATS_METRICSINROI.out.versions)
     }
 
     //
