@@ -199,6 +199,11 @@
                         "git_sha": "b7260db4681c80ff37964889c7a29223fc55d7de",
                         "installed_by": ["subworkflows"]
                     },
+                    "load_test_data": {
+                        "branch": "main",
+                        "git_sha": "0fdd04fbe05e37bfe1273d23e1d49018297ea7de",
+                        "installed_by": ["subworkflows"]
+                    },
                     "preproc_dwi": {
                         "branch": "main",
                         "git_sha": "ab4e37b436b6082fb8e79ffdfbaebdf882dec21d",
