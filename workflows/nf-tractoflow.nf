@@ -101,6 +101,7 @@ workflow NF_TRACTOFLOW {
                     [meta, dwi, bval, bvec, b0_mask, []]
             }
         FREEWATER_KERNELS( ch_freewater_kernels.first() )
+        ch_versions = ch_versions.mix(FREEWATER_KERNELS.out.versions.first())
 
         ch_freewater_input = TRACTOFLOW.out.dwi
             .join(TRACTOFLOW.out.b0_mask)
