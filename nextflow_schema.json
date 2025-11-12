@@ -981,6 +981,11 @@
             "type": "boolean",
             "description": "Compute Q-Ball metrics.",
             "help_text": "Compute Q-Ball metrics (gfa, nufo, odf, ...)."
+        },
+        "use_qball_for_tracking": {
+            "type": "boolean",
+            "description": "Use Q-Ball model for tractography instead of fODFs.",
+            "help_text": "Use Q-Ball model for tractography instead of fODFs."
         }
     }
 }
