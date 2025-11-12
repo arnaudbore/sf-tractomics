@@ -10,7 +10,6 @@ include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pi
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_nf-tractoflow_pipeline'
 include { TRACTOFLOW             } from '../subworkflows/nf-neuro/tractoflow'
 include { RECONST_SHSIGNAL       } from '../modules/nf-neuro/reconst/shsignal'
-include { RECONST_QBALL } from '../modules/nf-neuro/reconst/qball/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -87,15 +86,6 @@ workflow NF_TRACTOFLOW {
             TRACTOFLOW.out.dwi
                 .map{ it + [[]] }
         )
-
-    if (params.run_qball) {
-        // Q-Ball Reconstruction
-        ch_qball_input = TRACTOFLOW.out.dwi
-            .join(TRACTOFLOW.out.b0_mask)
-
-        RECONST_QBALL( ch_qball_input )
-        ch_versions = ch_versions.mix(RECONST_QBALL.out.versions.first())
-    }
 
     //
     // Collate and save software versions
