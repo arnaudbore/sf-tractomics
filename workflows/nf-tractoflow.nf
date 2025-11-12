@@ -14,7 +14,6 @@ include { REGISTRATION_ANTS as REGISTER_ATLAS_BUNDLES } from '../modules/nf-neur
 include { REGISTRATION_ANTSAPPLYTRANSFORMS as TRANSFORM_ATLAS_BUNDLES } from '../modules/nf-neuro/registration/antsapplytransforms/main.nf'
 include { BUNDLE_IIT             } from '../modules/local/bundle/iit/main'
 include { VOLUME_ROISTATS        } from '../modules/local/volume/roistats/main'
-include { VOLUME_COLLECTSTATS    } from '../modules/local/volume/collectstats/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
