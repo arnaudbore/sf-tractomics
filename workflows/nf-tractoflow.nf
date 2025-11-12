@@ -144,7 +144,7 @@ workflow NF_TRACTOFLOW {
         // COLLECT/GROUP ROI STATS
         //
         ch_collection_input = VOLUME_ROISTATS.out.stats_csv
-            map{ _meta, stats_csv -> stats_csv }
+            .map{ _meta, stats_csv -> stats_csv }
 
         ch_collection_input.collectFile(
             storeDir: "${params.outdir}/metrics/",
