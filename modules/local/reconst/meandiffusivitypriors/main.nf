@@ -5,16 +5,16 @@ process RECONST_MEANDIFFUSIVITYPRIORS {
     container "scilus/scilpy:2.2.0_cpu"
 
     input:
-        path(iso_diff_list)
         path(para_diff_list)
+        path(iso_diff_list)
         path(perp_diff_list) //** optional, input = [] **//
 
     output:
-        path "mean_iso_diff.txt"     , emit: mean_iso_diff
         path "mean_para_diff.txt"    , emit: mean_para_diff
+        path "mean_iso_diff.txt"     , emit: mean_iso_diff
         path "mean_perp_diff.txt"    , emit: mean_perp_diff, optional: true
-        env  'mean_iso_diff'         , emit: mean_iso_diff_val
         env  'mean_para_diff'        , emit: mean_para_diff_val
+        env  'mean_iso_diff'         , emit: mean_iso_diff_val
         env  'mean_perp_diff'        , emit: mean_perp_diff_val, optional: true
 
     when:

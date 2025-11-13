@@ -134,10 +134,10 @@ workflow NF_TRACTOFLOW {
             // Then compute mean diffusivity priors across subjects.
             if (params.average_diff_priors) {
                 RECONST_MEANDIFFUSIVITYPRIORS(
-                    RECONST_DIFFUSIVITYPRIORS.out.iso_diff
+                    RECONST_DIFFUSIVITYPRIORS.out.para_diff
                         .map{ _meta, path -> path }
                         .collect(),
-                    RECONST_DIFFUSIVITYPRIORS.out.para_diff
+                    RECONST_DIFFUSIVITYPRIORS.out.iso_diff
                         .map{ _meta, path -> path }
                         .collect(),
                     RECONST_DIFFUSIVITYPRIORS.out.perp_diff
