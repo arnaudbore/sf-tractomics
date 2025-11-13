@@ -19,6 +19,7 @@ nextflow_workflow {
     tag "reconst/dtimetrics"
     tag "reconst/frf"
     tag "reconst/fodf"
+    tag "reconst/qball"
     tag "reconst/meanfrf"
     tag "registration/antsapplytransforms"
     tag "tracking/localtracking"
@@ -47,8 +48,6 @@ nextflow_workflow {
                 pft_number_of_particles = 4
                 lt_seeding_strategy = "nt"
                 lt_number_of_seeds = 4000
-                run_qball = true
-                use_qball_for_tracking = true
             }
             workflow {
                 """
@@ -107,7 +106,7 @@ nextflow_workflow {
                 ).match() }
             )
         }
-    },
+    }
 
     test("tractoflow - qball tracking") {
         when {
