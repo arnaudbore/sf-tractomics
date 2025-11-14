@@ -115,6 +115,11 @@
                         "git_sha": "0fdd04fbe05e37bfe1273d23e1d49018297ea7de",
                         "installed_by": ["tractoflow"]
                     },
+                    "reconst/freewater": {
+                        "branch": "main",
+                        "git_sha": "fd7d3fcca3b62e479dd59132734fba896d88858b",
+                        "installed_by": ["modules"]
+                    },
                     "reconst/frf": {
                         "branch": "main",
                         "git_sha": "a51881f1c316e0e52b68fa66d7465c32339e2142",
