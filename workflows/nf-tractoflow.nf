@@ -14,6 +14,8 @@ include { REGISTRATION_ANTS as REGISTER_ATLAS_BUNDLES } from '../modules/nf-neur
 include { REGISTRATION_ANTSAPPLYTRANSFORMS as TRANSFORM_ATLAS_BUNDLES } from '../modules/nf-neuro/registration/antsapplytransforms/main.nf'
 include { BUNDLE_IIT             } from '../modules/local/bundle/iit/main'
 include { VOLUME_ROISTATS        } from '../modules/local/volume/roistats/main'
+include { STATS_METRICSINROI     } from '../modules/nf-neuro/stats/metricsinroi/main'
+include { STATS_JSONTOCSV        } from '../modules/local/stats/jsontocsv/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -130,7 +132,6 @@ workflow NF_TRACTOFLOW {
         // EXTRACT ROI VOLUME STATISTICS
         //
         // Input: [meta, [metrics_list], [masks]]
-
         ch_input_volume_roistats = ch_input_volume_roistats
             .map {tuple ->
                 def meta = tuple[0]
@@ -138,12 +139,19 @@ workflow NF_TRACTOFLOW {
                 return [meta, metrics]
             }
             .join(TRANSFORM_ATLAS_BUNDLES.out.warped_image)
-        VOLUME_ROISTATS(ch_input_volume_roistats)
+            .map {
+                meta, metrics, masks ->
+                    [meta, metrics, masks, []]
+            }
+
+        STATS_METRICSINROI(ch_input_volume_roistats)
+
+        STATS_JSONTOCSV(STATS_METRICSINROI.out.mqc)
 
         //
         // COLLECT/GROUP ROI STATS
         //
-        ch_collection_input = VOLUME_ROISTATS.out.stats_csv
+        ch_collection_input = STATS_JSONTOCSV.out.stats_csv
             .map{ _meta, stats_csv -> stats_csv }
 
         ch_collection_input.collectFile(
