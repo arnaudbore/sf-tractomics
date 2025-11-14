@@ -103,14 +103,13 @@ workflow NF_TRACTOFLOW {
         // Option 2: The user wants to compute the mean diffusivity priors across subjects. (Recommended)
         // Option 3: The user wants to compute diffusivity priors for each subject individually.
 
-        if (params.run_noddi &&
-            ((params.iso_diff != null && params.para_diff == null) ||
-            (params.iso_diff == null && params.para_diff != null) )) {
+        if (params.run_noddi && ([params.iso_diff, params.para_diff].any()
+            && ! [params.iso_diff, params.para_diff].every())) {
             error "Please provide both iso_diff and para_diff parameters to use custom diffusivity priors for NODDI."
         }
         else if (params.run_freewater_correction
-            && (params.iso_diff != null || params.para_diff != null || params.perp_diff_min != null || params.perp_diff_max != null)
-            && (params.iso_diff == null || params.para_diff == null || params.perp_diff_min == null || params.perp_diff_max == null)) {
+            && [params.iso_diff, params.para_diff, params.perp_diff_min, params.perp_diff_max].any()
+            && ! [params.iso_diff, params.para_diff, params.perp_diff_min, params.perp_diff_max].every()) {
             error "Please provide all iso_diff, para_diff, perp_diff_min and perp_diff_max parameters to use custom "
                 "diffusivity priors for Freewater Elimination. Otherwise, specify none and the priors will be "
                 "automatically computed."
@@ -125,7 +124,7 @@ workflow NF_TRACTOFLOW {
             && params.perp_diff_min != null && params.perp_diff_max != null) {
             if (params.average_diff_priors) {
                 log.warn "Both custom diffusivity priors and average_diff_priors parameter were provided."
-                    "The specified diffusivity priors will be used across subjects."
+                    "The specified custom diffusivity priors will be used across subjects."
             }
 
             ch_noddi_input = ch_noddi_input
@@ -185,8 +184,8 @@ workflow NF_TRACTOFLOW {
 
         if (params.run_noddi) {
             ch_noddi_input = ch_noddi_input
-            .map{ meta, dwi, bval, bvec, b0_mask, para_diff, iso_diff ->
-                [meta, dwi, bval, bvec, b0_mask, [], para_diff, iso_diff] }
+                .map{ meta, dwi, bval, bvec, b0_mask, para_diff, iso_diff ->
+                    [meta, dwi, bval, bvec, b0_mask, [], para_diff, iso_diff] }
 
             RECONST_NODDI( ch_noddi_input )
             ch_versions = ch_versions.mix(RECONST_NODDI.out.versions)
@@ -194,8 +193,8 @@ workflow NF_TRACTOFLOW {
 
         if (params.run_freewater_correction) {
             ch_freewater_input = ch_freewater_input
-            .map{ meta, dwi, bval, bvec, b0_mask, para_diff, iso_diff, perp_diff_min, perp_diff_max ->
-                [meta, dwi, bval, bvec, b0_mask, [], para_diff, iso_diff, perp_diff_min, perp_diff_max] }
+                .map{ meta, dwi, bval, bvec, b0_mask, para_diff, iso_diff, perp_diff_min, perp_diff_max ->
+                    [meta, dwi, bval, bvec, b0_mask, [], para_diff, iso_diff, perp_diff_min, perp_diff_max] }
 
             RECONST_FREEWATER( ch_freewater_input )
             ch_versions = ch_versions.mix(RECONST_FREEWATER.out.versions)
