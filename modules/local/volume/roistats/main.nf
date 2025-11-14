@@ -17,6 +17,8 @@ process VOLUME_ROISTATS {
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
 
+    def suffix_to_remove = "_mask_warped"
+
     """
     shopt -s extglob
     mkdir metrics
@@ -35,7 +37,11 @@ process VOLUME_ROISTATS {
     new_mask_list=""
     for mask in $masks_list;
     do
-        bname=\$(echo \$mask | sed -E 's/.*__(.*)_mask__.*/\\1/')
+        # Remove the prefix from the name
+        stem="\${mask%%.*}"
+        tmp="\${stem#${prefix}_}"
+        bname=\${tmp/${suffix_to_remove}/}
+
         mv \$mask \${bname}.nii.gz
         new_mask_list="\$new_mask_list \${bname}.nii.gz"
     done
