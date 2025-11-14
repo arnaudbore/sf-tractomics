@@ -103,10 +103,9 @@ workflow NF_TRACTOFLOW {
         // Option 2: The user wants to compute the mean diffusivity priors across subjects. (Recommended)
         // Option 3: The user wants to compute diffusivity priors for each subject individually.
 
-
         if (params.run_noddi &&
             ((params.iso_diff != null && params.para_diff == null) ||
-             (params.iso_diff == null && params.para_diff != null) )) {
+            (params.iso_diff == null && params.para_diff != null) )) {
             error "Please provide both iso_diff and para_diff parameters to use custom diffusivity priors for NODDI."
         }
         else if (params.run_freewater_correction
