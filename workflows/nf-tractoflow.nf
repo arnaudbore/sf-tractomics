@@ -12,7 +12,7 @@ include { TRACTOFLOW             } from '../subworkflows/nf-neuro/tractoflow'
 include { RECONST_SHSIGNAL       } from '../modules/nf-neuro/reconst/shsignal'
 include { REGISTRATION_ANTS as REGISTER_ATLAS_BUNDLES } from '../modules/nf-neuro/registration/ants/main'
 include { REGISTRATION_ANTSAPPLYTRANSFORMS as TRANSFORM_ATLAS_BUNDLES } from '../modules/nf-neuro/registration/antsapplytransforms/main.nf'
-include { BUNDLE_IIT             } from '../modules/local/bundle/iit/main'
+include { ATLAS_IIT              } from '../modules/local/atlas/iit/main'
 include { VOLUME_ROISTATS        } from '../modules/local/volume/roistats/main'
 include { STATS_METRICSINROI     } from '../modules/nf-neuro/stats/metricsinroi/main'
 include { STATS_JSONTOCSV        } from '../modules/local/stats/jsontocsv/main'
@@ -101,19 +101,19 @@ workflow NF_TRACTOFLOW {
         // Extract bundle masks from IIT atlas
         ch_iit_template_bundles = channel.fromPath( params.iit_atlas.bundle_masks_dir + "/*.nii.gz", checkIfExists: true ).collect()
         ch_iit_template_thr = channel.fromPath( params.iit_atlas.bundle_masks_thresholds, checkIfExists: true )
-        BUNDLE_IIT(ch_iit_template_bundles, ch_iit_template_thr)
+        ATLAS_IIT(Channel.of([]), Channel.of([]), Channel.of([]))
 
         // Register IIT atlas to subject space
-        ch_iit_template_b0 = channel.fromPath( params.iit_atlas.template_b0 )
+        // ch_iit_template_b0 = channel.fromPath( params.iit_atlas.template_b0 )
         ch_input_register_iit = TRACTOFLOW.out.b0
-            .combine(ch_iit_template_b0)
+            .combine(ATLAS_IIT.out.b0)
             .map{ meta, b0, template_b0 -> [meta, b0, template_b0, []] }
         REGISTER_ATLAS_BUNDLES(ch_input_register_iit)
 
         // Apply the transformation to subject space to the bundles
         ch_iit_transform_bundles = TRACTOFLOW.out.b0
             .join(REGISTER_ATLAS_BUNDLES.out.forward_image_transform)
-            .combine(BUNDLE_IIT.out.bundle_masks.toList())
+            .combine(ATLAS_IIT.out.bundles.toList())
             .map {
                 meta, b0, transform, bundles ->
                     [meta, bundles, b0, transform]
