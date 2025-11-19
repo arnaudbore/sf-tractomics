@@ -91,21 +91,14 @@ workflow NF_TRACTOFLOW {
     //
     // Run RECONST/NODDI & RECONST/FREEWATER
     //
-    if (params.run_noddi || params.run_freewater_correction) {
+    if (params.run_noddi || params.run_freewater) {
         RECONST_FW_NODDI(
             TRACTOFLOW.out.dwi,
             TRACTOFLOW.out.b0_mask,
             TRACTOFLOW.out.dti_fa
                 .join(TRACTOFLOW.out.dti_ad)
                 .join(TRACTOFLOW.out.dti_rd)
-                .join(TRACTOFLOW.out.dti_md),
-            params.run_noddi,
-            params.run_freewater_correction,
-            params.para_diff,
-            params.iso_diff,
-            params.perp_diff_min,
-            params.perp_diff_max,
-            params.average_diff_priors
+                .join(TRACTOFLOW.out.dti_md)
         )
         // ch_versions = ch_versions.mix(RECONST_FW_NODDI.out.versions)
     }
