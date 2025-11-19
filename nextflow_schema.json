@@ -882,6 +882,28 @@
                     "default": true
                 }
             }
+        },
+        "bundleseg_options": {
+            "title": "BundleSeg options",
+            "type": "object",
+            "description": "Define the behaviour of the bundle_seg subworkflow.",
+            "default": "",
+            "help_text": "Define the bundle_seg subworkflow configuration parameters.",
+            "properties": {
+                "run_bundle_seg": {
+                    "type": "boolean"
+                },
+                "atlas_directory": {
+                    "type": "string",
+                    "description": "Path to the BundleSeg atlas directory.",
+                    "help_text": "Path to the BundleSeg atlas directory. If not set, the default bundle_seg atlas will automatically downloaded."
+                },
+                "run_synthmorph": {
+                    "type": "boolean",
+                    "description": "Use SynthMorph for registration instead of ANTs for BundleSeg. (Requires Freesurfer license)",
+                    "help_text": "Use SynthMorph for registration instead of ANTs for BundleSeg. (Requires Freesurfer license)"
+                }
+            }
         }
     },
     "allOf": [
@@ -913,25 +935,10 @@
             "$ref": "#/$defs/generic_options"
         },
         {
-            "$ref": "#/$defs/dwi_preprocessing_options"
-        },
-        {
-            "$ref": "#/$defs/t1_preprocessing_options"
-        },
-        {
-            "$ref": "#/$defs/resampling_options"
-        },
-        {
-            "$ref": "#/$defs/dwi_processing_options"
-        },
-        {
-            "$ref": "#/$defs/particle_filtering_tractography_options"
-        },
-        {
-            "$ref": "#/$defs/local_tractography_options"
-        },
-        {
             "$ref": "#/$defs/subworkflows_hidden_options"
+        },
+        {
+            "$ref": "#/$defs/bundleseg_options"
         }
     ],
     "properties": {
@@ -976,6 +983,12 @@
             "default": 4,
             "description": "Number of processes for registration task",
             "help_text": "Number of processes for registration task"
+        },
+        "processes_bundle_seg": {
+            "type": "integer",
+            "default": 4,
+            "description": "Number of processes used for bundle segmentation.",
+            "help_text": "Number of processes used for bundle segmentation."
         },
         "run_qball": {
             "type": "boolean",
