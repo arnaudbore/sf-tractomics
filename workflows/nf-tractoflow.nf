@@ -10,7 +10,7 @@ include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pi
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_nf-tractoflow_pipeline'
 include { TRACTOFLOW             } from '../subworkflows/nf-neuro/tractoflow'
 include { RECONST_SHSIGNAL       } from '../modules/nf-neuro/reconst/shsignal'
-include { RECONST_FW_NODDI       } from '../subworkflows/local/reconst_fw_noddi/main'
+include { RECONST_FW_NODDI       } from '../subworkflows/nf-neuro/reconst_fw_noddi/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
