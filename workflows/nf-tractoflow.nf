@@ -13,7 +13,6 @@ include { RECONST_SHSIGNAL       } from '../modules/nf-neuro/reconst/shsignal'
 include { REGISTRATION_ANTS as REGISTER_ATLAS_BUNDLES } from '../modules/nf-neuro/registration/ants/main'
 include { REGISTRATION_ANTSAPPLYTRANSFORMS as TRANSFORM_ATLAS_BUNDLES } from '../modules/nf-neuro/registration/antsapplytransforms/main.nf'
 include { ATLAS_IIT              } from '../modules/local/atlas/iit/main'
-include { VOLUME_ROISTATS        } from '../modules/local/volume/roistats/main'
 include { STATS_METRICSINROI     } from '../modules/nf-neuro/stats/metricsinroi/main'
 include { STATS_JSONTOCSV        } from '../modules/local/stats/jsontocsv/main'
 
@@ -118,7 +117,7 @@ workflow NF_TRACTOFLOW {
 
         // Prepare volume ROI metric extraction
         // Start by collecting DTI metrics
-        ch_input_volume_roistats = TRACTOFLOW.out.dti_fa
+        ch_input_metricsinroi = TRACTOFLOW.out.dti_fa
             .join(TRACTOFLOW.out.dti_md)
             .join(TRACTOFLOW.out.dti_rd)
             .join(TRACTOFLOW.out.dti_ad)
@@ -127,7 +126,7 @@ workflow NF_TRACTOFLOW {
         // EXTRACT ROI VOLUME STATISTICS
         //
         // Input: [meta, [metrics_list], [masks]]
-        ch_input_volume_roistats = ch_input_volume_roistats
+        ch_input_metricsinroi = ch_input_metricsinroi
             .map {tuple ->
                 def meta = tuple[0]
                 def metrics = tuple[1..-1]
@@ -139,7 +138,7 @@ workflow NF_TRACTOFLOW {
                     [meta, metrics, masks, []]
             }
 
-        STATS_METRICSINROI(ch_input_volume_roistats)
+        STATS_METRICSINROI(ch_input_metricsinroi)
 
         STATS_JSONTOCSV(STATS_METRICSINROI.out.mqc)
 
