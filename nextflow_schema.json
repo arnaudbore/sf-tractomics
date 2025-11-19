@@ -999,6 +999,10 @@
             "type": "boolean",
             "description": "Use Q-Ball model for tractography instead of fODFs.",
             "help_text": "Use Q-Ball model for tractography instead of fODFs."
+        },
+        "run_atlas_based_tractometry": {
+            "type": "boolean",
+            "default": true
         }
     }
 }
