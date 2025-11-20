@@ -95,6 +95,7 @@ workflow NF_TRACTOFLOW {
 
     if (params.run_atlas_based_tractometry) {
         ATLAS_IIT()
+        ch_versions = ch_versions.mix(ATLAS_IIT.out.versions)
 
         // Register IIT atlas to subject space
         ch_input_register_iit = TRACTOFLOW.out.b0
