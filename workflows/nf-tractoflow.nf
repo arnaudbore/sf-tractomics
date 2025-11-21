@@ -12,7 +12,7 @@ include { TRACTOFLOW             } from '../subworkflows/nf-neuro/tractoflow'
 include { ATLAS_IIT              } from '../subworkflows/nf-neuro/atlas_iit/main'
 include { RECONST_SHSIGNAL       } from '../modules/nf-neuro/reconst/shsignal'
 include { BUNDLE_SEG             } from '../subworkflows/nf-neuro/bundle_seg/main' addParams(run_easyreg: false)
-include { REGISTRATION_ANTS as REGISTER_ATLAS_BUNDLES } from '../modules/nf-neuro/registration/ants/main'
+include { REGISTRATION_ANTS as REGISTER_ATLAS_B0 } from '../modules/nf-neuro/registration/ants/main'
 include { REGISTRATION_ANTSAPPLYTRANSFORMS as TRANSFORM_ATLAS_BUNDLES } from '../modules/nf-neuro/registration/antsapplytransforms/main.nf'
 include { STATS_METRICSINROI     } from '../modules/nf-neuro/stats/metricsinroi/main'
 include { STATS_JSONTOCSV        } from '../modules/local/stats/jsontocsv/main'
@@ -101,12 +101,12 @@ workflow NF_TRACTOFLOW {
         ch_input_register_iit = TRACTOFLOW.out.b0
             .combine(ATLAS_IIT.out.b0)
             .map{ meta, b0, template_b0 -> [meta, b0, template_b0, []] }
-        REGISTER_ATLAS_BUNDLES(ch_input_register_iit)
+        REGISTER_ATLAS_B0(ch_input_register_iit)
 
         // Apply the transformation to subject space to the bundles
         ch_iit_transform_bundles = TRACTOFLOW.out.b0
-            .join(REGISTER_ATLAS_BUNDLES.out.forward_image_transform)
-            .combine(ATLAS_IIT.out.bundle_masks)
+            .join(REGISTER_ATLAS_B0.out.forward_image_transform)
+            .combine(ATLAS_IIT.out.bundle_masks.toList())
             .map {
                 meta, b0, transform, bundles ->
                     [meta, bundles, b0, transform]

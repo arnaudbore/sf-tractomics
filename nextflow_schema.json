@@ -1002,7 +1002,18 @@
         },
         "run_atlas_based_tractometry": {
             "type": "boolean",
-            "default": true
+            "default": true,
+            "description": "Run atlas-based tractometry using ROI masks obtained from IIT."
+        },
+        "atlas_iit_b0": {
+            "type": "string",
+            "description": "Path to the IIT mean B0 nifti image file.",
+            "help_text": "Path to the IIT mean B0 nifti image file."
+        },
+        "atlas_iit_bundle_masks_dir": {
+            "type": "string",
+            "description": "Path to the directory holding all IIT bundle (binary) masks nifti files.",
+            "help_text": "Path to the directory holding all IIT bundle (binary) masks nifti files."
         }
     }
 }
