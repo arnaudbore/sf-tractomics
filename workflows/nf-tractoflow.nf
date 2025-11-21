@@ -94,6 +94,41 @@ workflow NF_TRACTOFLOW {
                 .map{ it + [[]] }
         )
 
+    //
+    // Run BundleSeg
+    //
+    ch_bundle_seg = Channel.empty()
+    if (params.run_bundle_seg) {
+        ch_input_bundle_seg = TRACTOFLOW.out.pft_tractogram
+            .mix(TRACTOFLOW.out.local_tractogram)
+            .groupTuple()
+        BUNDLE_SEG(
+            TRACTOFLOW.out.dti_fa,
+            TRACTOFLOW.out.pft_tractogram
+                .mix(TRACTOFLOW.out.local_tractogram)
+                .groupTuple(),
+            Channel.empty()
+        )
+
+        ch_versions = ch_versions.mix(BUNDLE_SEG.out.versions)
+        ch_bundle_seg = BUNDLE_SEG.out.bundles
+    }
+
+    //
+    // Run RECONST/NODDI & RECONST/FREEWATER
+    //
+    if (params.run_noddi || params.run_freewater) {
+        RECONST_FW_NODDI(
+            TRACTOFLOW.out.dwi,
+            TRACTOFLOW.out.b0_mask,
+            TRACTOFLOW.out.dti_fa
+                .join(TRACTOFLOW.out.dti_ad)
+                .join(TRACTOFLOW.out.dti_rd)
+                .join(TRACTOFLOW.out.dti_md)
+        )
+        ch_versions = ch_versions.mix(RECONST_FW_NODDI.out.versions)
+    }
+
     if (params.run_atlas_based_tractometry) {
         ATLAS_IIT()
         ch_versions = ch_versions.mix(ATLAS_IIT.out.versions)
@@ -121,6 +156,18 @@ workflow NF_TRACTOFLOW {
             .join(TRACTOFLOW.out.dti_md)
             .join(TRACTOFLOW.out.dti_rd)
             .join(TRACTOFLOW.out.dti_ad)
+            .join(RECONST_FW_NODDI.out.fw_fw)
+            .join(RECONST_FW_NODDI.out.fw_dti_fa)
+            .join(RECONST_FW_NODDI.out.fw_dti_md)
+            .join(RECONST_FW_NODDI.out.fw_dti_rd)
+            .join(RECONST_FW_NODDI.out.fw_dti_ad)
+            .join(RECONST_FW_NODDI.out.noddi_ndi)
+            .join(RECONST_FW_NODDI.out.noddi_fwf)
+            .join(RECONST_FW_NODDI.out.noddi_odi)
+            .join(RECONST_FW_NODDI.out.noddi_ecvf)
+            .join(TRACTOFLOW.out.afd_total)
+            .join(TRACTOFLOW.out.afd_sum)
+            .join(TRACTOFLOW.out.afd_max)
 
         //
         // EXTRACT ROI VOLUME STATISTICS
@@ -158,41 +205,6 @@ workflow NF_TRACTOFLOW {
             skip: 1,
             keepHeader: true
         )
-    }
-
-    //
-    // Run RECONST/NODDI & RECONST/FREEWATER
-    //
-    if (params.run_noddi || params.run_freewater) {
-        RECONST_FW_NODDI(
-            TRACTOFLOW.out.dwi,
-            TRACTOFLOW.out.b0_mask,
-            TRACTOFLOW.out.dti_fa
-                .join(TRACTOFLOW.out.dti_ad)
-                .join(TRACTOFLOW.out.dti_rd)
-                .join(TRACTOFLOW.out.dti_md)
-        )
-        ch_versions = ch_versions.mix(RECONST_FW_NODDI.out.versions)
-    }
-
-    //
-    // Run BundleSeg
-    //
-    ch_bundle_seg = Channel.empty()
-    if (params.run_bundle_seg) {
-        ch_input_bundle_seg = TRACTOFLOW.out.pft_tractogram
-            .mix(TRACTOFLOW.out.local_tractogram)
-            .groupTuple()
-        BUNDLE_SEG(
-            TRACTOFLOW.out.dti_fa,
-            TRACTOFLOW.out.pft_tractogram
-                .mix(TRACTOFLOW.out.local_tractogram)
-                .groupTuple(),
-            Channel.empty()
-        )
-
-        ch_versions = ch_versions.mix(BUNDLE_SEG.out.versions)
-        ch_bundle_seg = BUNDLE_SEG.out.bundles
     }
 
     //
