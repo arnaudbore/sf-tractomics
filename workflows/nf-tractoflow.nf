@@ -16,7 +16,6 @@ include { BUNDLE_SEG             } from '../subworkflows/nf-neuro/bundle_seg/mai
 include { REGISTRATION_ANTS as REGISTER_ATLAS_B0 } from '../modules/nf-neuro/registration/ants/main'
 include { REGISTRATION_ANTSAPPLYTRANSFORMS as TRANSFORM_ATLAS_BUNDLES } from '../modules/nf-neuro/registration/antsapplytransforms/main.nf'
 include { STATS_METRICSINROI     } from '../modules/local/stats/metricsinroi/main'
-include { STATS_JSONTOCSV        } from '../modules/local/stats/jsontocsv/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -194,16 +193,16 @@ workflow NF_TRACTOFLOW {
         //
         // COLLECT/GROUP ROI STATS
         //
-        ch_collection_input = STATS_METRICSINROI.out.stats_csv
-            .map{ _meta, stats_csv -> stats_csv }
+        ch_collection_input = STATS_METRICSINROI.out.stats_tab
+            .map{ _meta, stats_tab -> stats_tab }
 
         // Collect all ROI stats into a single file
-        // by appending each row of the CSV files,
+        // by appending each row of the TSV/CSV files,
         // while keeping the header from the first
         // file only and skipping it in the rest.
         ch_collection_input.collectFile(
             storeDir: "${params.outdir}/metrics/",
-            name: "roi_stats.csv",
+            name: "roi_stats.tsv",
             skip: 1,
             keepHeader: true
         )
