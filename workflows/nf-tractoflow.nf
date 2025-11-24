@@ -15,7 +15,7 @@ include { RECONST_FW_NODDI       } from '../subworkflows/nf-neuro/reconst_fw_nod
 include { BUNDLE_SEG             } from '../subworkflows/nf-neuro/bundle_seg/main' addParams(run_easyreg: false)
 include { REGISTRATION_ANTS as REGISTER_ATLAS_B0 } from '../modules/nf-neuro/registration/ants/main'
 include { REGISTRATION_ANTSAPPLYTRANSFORMS as TRANSFORM_ATLAS_BUNDLES } from '../modules/nf-neuro/registration/antsapplytransforms/main.nf'
-include { STATS_METRICSINROI     } from '../modules/local/stats/metricsinroi/main'
+include { STATS_METRICSINROI     } from '../modules/nf-neuro/stats/metricsinroi/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

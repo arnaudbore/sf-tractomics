@@ -207,7 +207,7 @@
                     },
                     "stats/metricsinroi": {
                         "branch": "main",
-                        "git_sha": "f4abd9d52988b6e6f4e21483c7d53afb3d008bcd",
+                        "git_sha": "40b925233bff3c57dd11aa447b84c995bb45ee6e",
                         "installed_by": ["modules"]
                     },
                     "tracking/localtracking": {
