@@ -175,7 +175,7 @@
                     "default": "eddy_cpu",
                     "description": "Command to use to run Eddy.",
                     "help_text": "Command to use to run Eddy.",
-                    "enum": ["eddy_cpu", "eddy_cuda10.2"]
+                    "enum": ["eddy_cpu", "eddy_cuda10.2", "eddy"]
                 },
                 "bet_topup_before_eddy_f": {
                     "type": "number",
