@@ -47,7 +47,7 @@ workflow NF_TRACTOFLOW {
             ch_topup_config = Channel.fromPath(params.config_topup, checkIfExists: true)
         }
         else {
-            ch_topup_config = Channel.from( params.config_topup )
+            ch_topup_config = Channel.value( params.config_topup )
         }
     }
 
