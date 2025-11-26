@@ -918,6 +918,7 @@
                 },
                 "nb_points": {
                     "type": "integer",
+                    "default": 10,
                     "description": "Number of points for tractometry.",
                     "help_text": "Number of points for tractometry."
                 }
