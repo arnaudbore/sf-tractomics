@@ -115,7 +115,7 @@ workflow NF_TRACTOFLOW {
 
     // Prepare volume ROI metric extraction
     // Start by collecting DTI metrics
-    ch_input_metricsinroi = TRACTOFLOW.out.dti_fa
+    ch_input_metrics = TRACTOFLOW.out.dti_fa
         .join(TRACTOFLOW.out.dti_md)
         .join(TRACTOFLOW.out.dti_rd)
         .join(TRACTOFLOW.out.dti_ad)
@@ -139,7 +139,7 @@ workflow NF_TRACTOFLOW {
 
         // Add FW/NODDI metrics to the volume
         // ROI extraction.
-        ch_input_metricsinroi = ch_input_metricsinroi
+        ch_input_metrics = ch_input_metrics
             .join(RECONST_FW_NODDI.out.fw_fw)
             .join(RECONST_FW_NODDI.out.fw_dti_fa)
             .join(RECONST_FW_NODDI.out.fw_dti_md)
@@ -176,7 +176,7 @@ workflow NF_TRACTOFLOW {
         // EXTRACT ROI VOLUME STATISTICS
         //
         // Input: [meta, [metrics_list], [masks]]
-        ch_input_metricsinroi = ch_input_metricsinroi
+        ch_input_metricsinroi = ch_input_metrics
             .map {tuple ->
                 def meta = tuple[0]
                 def metrics = tuple[1..-1]
@@ -209,14 +209,18 @@ workflow NF_TRACTOFLOW {
     }
 
     if ( params.run_tractometry ) {
-        ch_for_tractometry = ch_bundle_seg
-            .join(ch_input_metricsinroi)
-            .join(TRACTOFLOW.out.fodf)
-            .map {
-                meta, bundles, metrics, fodf ->
-                    [meta, bundles, channel.empty(), metrics, channel.empty(), fodf]
+        ch_input_metrics_for_tractometry = ch_input_metrics
+            .map {tuple ->
+                def meta = tuple[0]
+                def metrics = tuple[1..-1]
+                return [meta, metrics]
             }
-        TRACTOMETRY(ch_for_tractometry)
+        TRACTOMETRY(
+            ch_bundle_seg,
+            channel.empty(),
+            ch_input_metrics_for_tractometry,
+            channel.empty(),
+            TRACTOFLOW.out.fodf)
         ch_versions = ch_versions.mix(TRACTOMETRY.out.versions)
     }
 
