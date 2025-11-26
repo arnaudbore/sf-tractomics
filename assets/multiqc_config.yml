@@ -3,7 +3,7 @@ report_comment: >
   analysis pipeline.
 
 report_section_order:
-  "nf-tractoflow-summary":
+  "scilus-nf-tractoflow-summary":
     order: -1001
   "shell_qc":
     order: -600
