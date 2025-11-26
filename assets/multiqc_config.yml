@@ -19,7 +19,7 @@ report_section_order:
     order: -675
   "tracking_qc":
     order: -725
-  "nf-pediatric-methods-description":
+  "nf-tractoflow-methods-description":
     order: -900
   software_versions:
     order: -1000
