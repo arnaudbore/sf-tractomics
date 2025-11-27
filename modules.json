@@ -112,7 +112,7 @@
                     },
                     "preproc/eddy": {
                         "branch": "main",
-                        "git_sha": "0fdd04fbe05e37bfe1273d23e1d49018297ea7de",
+                        "git_sha": "475ca43937134848fb422aeafc74663b05f61345",
                         "installed_by": ["topup_eddy"]
                     },
                     "preproc/gibbs": {
@@ -134,6 +134,11 @@
                         "branch": "main",
                         "git_sha": "0fdd04fbe05e37bfe1273d23e1d49018297ea7de",
                         "installed_by": ["topup_eddy"]
+                    },
+                    "qc/multiqc": {
+                        "branch": "main",
+                        "git_sha": "1fff553d147ef5f2752c92f49e1ee50d43159ab7",
+                        "installed_by": ["modules"]
                     },
                     "reconst/diffusivitypriors": {
                         "branch": "main",
@@ -311,7 +316,7 @@
                     },
                     "topup_eddy": {
                         "branch": "main",
-                        "git_sha": "74181e9f66228d5e35e80d408086d676ce73b0ab",
+                        "git_sha": "cf3c47a430239aab4371da03399ebf99499a85bf",
                         "installed_by": ["preproc_dwi"]
                     },
                     "tractoflow": {
