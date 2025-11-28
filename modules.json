@@ -45,9 +45,9 @@
                         "git_sha": "247d96886548c83b01812a61f5b1393fa4e911e7",
                         "installed_by": ["preproc_dwi", "topup_eddy"]
                     },
-                    "betcrop/synthbet": {
+                    "betcrop/synthstrip": {
                         "branch": "main",
-                        "git_sha": "60e21b273653eec3b710b91562e714c74ef4d0c7",
+                        "git_sha": "b9a147a1075d1431189341976ee673ff31900603",
                         "installed_by": ["preproc_t1"]
                     },
                     "bundle/centroid": {
