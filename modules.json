@@ -286,7 +286,7 @@
                     },
                     "bundle_seg": {
                         "branch": "main",
-                        "git_sha": "74181e9f66228d5e35e80d408086d676ce73b0ab",
+                        "git_sha": "0b80b82a03984b69657f6a55d15b06da4cb1c8fa",
                         "installed_by": ["subworkflows"]
                     },
                     "io_bids": {
