@@ -899,7 +899,8 @@
             "help_text": "Define the bundle_seg subworkflow configuration parameters.",
             "properties": {
                 "run_bundle_seg": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false
                 },
                 "atlas_directory": {
                     "type": "string",
@@ -921,7 +922,8 @@
             "help_text": "Define the tractometry subworkflow configuration parameters.",
             "properties": {
                 "run_tractometry": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false
                 },
                 "nb_points": {
                     "type": "integer",
@@ -1014,11 +1016,13 @@
         },
         "use_qball_for_tracking": {
             "type": "boolean",
+            "default": false,
             "description": "Use Q-Ball model for tractography instead of fODFs.",
             "help_text": "Use Q-Ball model for tractography instead of fODFs."
         },
         "run_atlas_based_tractometry": {
             "type": "boolean",
+            "default": false,
             "description": "Run atlas-based tractometry using ROI masks obtained from IIT."
         },
         "atlas_iit_b0": {
