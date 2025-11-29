@@ -260,7 +260,7 @@ workflow NF_TRACTOFLOW {
         ch_tractometry_mqc = TRACTOMETRY.out.mean_tsv
             .map{ _meta, stats -> stats.collectFile(
                 storeDir: "${params.outdir}/metrics/",
-                name: "bundle_mean_stats.tsv",
+                name: "bundles_mean_stats.tsv",
                 skip: 1,
                 keepHeader: true
             )
