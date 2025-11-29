@@ -94,7 +94,7 @@ workflow NF_TRACTOFLOW {
             .join(TRACTOFLOW.out.local_tractogram)
             .map {
                 meta, pft_tractogram, local_tractogram ->
-                    [meta, [pft_tractogram, local_tractogram]]}
+                    [meta, [pft_tractogram, local_tractogram], []]}
         ENSEMBLE_TRACKING(ch_tractogram_math_input)
         ch_input_tracking_qc = ENSEMBLE_TRACKING.out.trk
     }
