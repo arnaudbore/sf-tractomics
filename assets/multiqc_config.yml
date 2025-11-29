@@ -146,4 +146,9 @@ sp:
 remove_sections:
   - tractogram_qc
 
+# Customisable module parameters
+framewise_displacement:
+  warn_threshold: 0.5 # mm
+  fail_threshold: 1.2 # mm
+
 export_plots: false
