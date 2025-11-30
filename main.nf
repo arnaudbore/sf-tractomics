@@ -1,9 +1,9 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    scilus/nf-tractoflow
+    scilus/sf-tractomics
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/scilus/nf-tractoflow
+    Github : https://github.com/scilus/sf-tractomics
 ----------------------------------------------------------------------------------------
 */
 
@@ -13,9 +13,9 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { NF_TRACTOFLOW  } from './workflows/nf-tractoflow'
-include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_nf-tractoflow_pipeline'
-include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_nf-tractoflow_pipeline'
+include { SF_TRACTOMICS  } from './workflows/sf-tractomics'
+include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_sf-tractomics_pipeline'
+include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_sf-tractomics_pipeline'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     NAMED WORKFLOWS FOR PIPELINE
@@ -25,7 +25,7 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_nf-t
 //
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
-workflow SCILUS_NF_TRACTOFLOW {
+workflow SCILUS_SF_TRACTOMICS {
 
     take:
     t1                  // channel: t1 read in from --input
@@ -42,7 +42,7 @@ workflow SCILUS_NF_TRACTOFLOW {
     //
     // WORKFLOW: Run pipeline
     //
-    NF_TRACTOFLOW (
+    SF_TRACTOMICS (
         t1,
         wmparc,
         aparc_aseg,
@@ -53,7 +53,7 @@ workflow SCILUS_NF_TRACTOFLOW {
         lesion
     )
     emit:
-    multiqc_report = NF_TRACTOFLOW.out.multiqc_report // channel: /path/to/multiqc_report.html
+    multiqc_report = SF_TRACTOMICS.out.multiqc_report // channel: /path/to/multiqc_report.html
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -78,7 +78,7 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    SCILUS_NF_TRACTOFLOW (
+    SCILUS_SF_TRACTOMICS (
         PIPELINE_INITIALISATION.out.t1,
         PIPELINE_INITIALISATION.out.wmparc,
         PIPELINE_INITIALISATION.out.aparc_aseg,
@@ -97,7 +97,7 @@ workflow {
         params.plaintext_email,
         params.outdir,
         params.monochrome_logs,
-        SCILUS_NF_TRACTOFLOW.out.multiqc_report
+        SCILUS_SF_TRACTOMICS.out.multiqc_report
     )
 }
 

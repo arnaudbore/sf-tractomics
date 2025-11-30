@@ -26,7 +26,7 @@ include { TRACTOMETRY } from '../subworkflows/nf-neuro/tractometry/main'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-workflow NF_TRACTOFLOW {
+workflow SF_TRACTOMICS {
     take:
     ch_t1
     ch_wmparc
