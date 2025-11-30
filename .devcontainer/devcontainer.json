@@ -1,5 +1,5 @@
 {
-    "name": "nf-tractoflow",
+    "name": "sf-tractomics",
     "build": { "dockerfile": "Dockerfile", "context": ".." },
     "forwardPorts": [3000],
     "features": {
@@ -24,7 +24,7 @@
         {
             "target": "/commandhistory",
             "type": "volume",
-            "source": "nf-tractoflow-${devcontainerId}-bashhistory"
+            "source": "sf-tractomics-${devcontainerId}-bashhistory"
         }
     ],
     // Configure tool-specific properties.
