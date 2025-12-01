@@ -22,7 +22,7 @@
 
 ### [scilpy](https://github.com/scilus/scilpy)
 
-> Renauld, E., Boré, A., Poirier, C., Valcourt Caron, A., Karan, P., Théberge, A., Théaud, G., Edde, M., Poulin, P., Girard, G., Houde, J-C., Gagnon, A., St-Onge, E., Little, G., Legarreta, J. H., Thoumyre, S., Grenier, G., Ocampo-Pineda, M., Battochio, M., Beaudoin, V., Joanisse, A., Petit, L., Rheault, F., Descoteaux, M. *In revision*, Tractography analysis with the scilpy toolbox.
+> Renauld, E., Boré, A., Poirier, C., Valcourt Caron, A., Karan, P., Théberge, A., Théaud, G., Edde, M., Poulin, P., Girard, G., Houde, J-C., Gagnon, A., St-Onge, E., Little, G., Legarreta, J. H., Thoumyre, S., Grenier, G., Ocampo-Pineda, M., Battochio, M., Beaudoin, V., Joanisse, A., Petit, L., Rheault, F., Descoteaux, M. _In revision_, Tractography analysis with the scilpy toolbox.
 
 > St-Onge, E., Schilling, K. G., & Rheault, F. (2023). BundleSeg: A versatile, reliable and reproducible approach to white matter bundle segmentation (No. arXiv:2308.10958). arXiv. https://doi.org/10.48550/arXiv.2308.10958
 
