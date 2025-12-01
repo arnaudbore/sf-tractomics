@@ -11,7 +11,6 @@
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
 [![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://cloud.seqera.io/launch?pipeline=https://github.com/scilus/sf-tractomics)
 
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/sf-tractomics-white-logo.png">
   <source media="(prefers-color-scheme: light)" srcset="assets/sf-tractomics-dark-logo.png">

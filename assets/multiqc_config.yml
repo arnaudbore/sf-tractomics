@@ -21,7 +21,7 @@ report_section_order:
   framewise_displacement:
     order: 500
   bundle_seg_qc:
-    order: 600
+    order: 50
 
 modules_order:
   - framewise_displacement
@@ -158,6 +158,7 @@ sp:
 
 remove_sections:
   - tractogram_qc
+  - bundle_seg_qc
 
 # Customisable module parameters
 framewise_displacement:
