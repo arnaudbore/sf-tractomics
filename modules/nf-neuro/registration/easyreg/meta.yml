@@ -1,0 +1,153 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
+name: registration_easyreg
+description: Image registration and SynthSeg v2 segmentation with easyreg from freesurfer
+keywords:
+  - nifti
+  - registration
+  - segmentation
+  - neural network
+  - Artificial intelligence
+  - machine learning
+tools:
+  - Freesurfer:
+      description: |
+        Open source neuroimaging toolkit for processing, analyzing, and visualizing human brain MR images.
+      homepage: https://surfer.nmr.mgh.harvard.edu/
+      doi: 10.1016/j.neuroimage.2012.01.021
+      identifier: ""
+args:
+  - affine_only:
+      type: boolean
+      description: Only perform affine registration
+      default: false
+input:
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1', single_end:false ]`
+    - fixed_image:
+        type: file
+        description: Reference image in .nii(.gz) or .mgz format (note that, since the method is symmetric, the choice of reference vs floating is arbitrary).
+        pattern: "*.{nii,nii.gz,mgz}"
+        mandatory: true
+        ontologies:
+          - edam: http://edamontology.org/format_4001 # NIFTI format
+    - moving_image:
+        type: file
+        description: Image to register in .nii(.gz) or .mgz format.
+        pattern: "*.{nii,nii.gz,mgz}"
+        mandatory: true
+        ontologies:
+          - edam: http://edamontology.org/format_4001 # NIFTI format
+    - fixed_segmentation:
+        type: file
+        description: |
+          File with the SynthSeg v2 (non-robust) segmentation + parcellation of the reference image.
+          If it does not exist, EasyReg will create it.
+        pattern: "*.{nii,nii.gz}"
+        mandatory: false
+        ontologies:
+          - edam: http://edamontology.org/format_4001 # NIFTI format
+    - moving_segmentation:
+        type: file
+        description: |
+          File with the SynthSeg v2 (non-robust) segmentation + parcellation of the floating image.
+          If it does not exist, EasyReg will create it.
+        pattern: "*.{nii,nii.gz}"
+        mandatory: false
+        ontologies:
+          - edam: http://edamontology.org/format_4001 # NIFTI format
+output:
+  image_warped:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1', single_end:false ]`
+      - "*_warped.nii.gz":
+          type: file
+          description: Image warped onto the reference.
+          pattern: "*_warped.nii.gz"
+          ontologies:
+            - edam: http://edamontology.org/format_4001 # NIFTI format
+  fixed_warped:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1', single_end:false ]`
+      - "*_warped_reference.nii.gz":
+          type: file
+          description: Reference warped.
+          pattern: "*_warped_reference.nii.gz"
+          ontologies:
+            - edam: http://edamontology.org/format_4001 # NIFTI format
+  forward_warp:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1', single_end:false ]`
+      - "*_forward0_warp.nii.gz":
+          type: file
+          description: Forward deformation field, composed of all registration stages (affine+deformation).
+          pattern: "*_forward0_warp.nii.gz"
+          mandatory: false
+          ontologies:
+            - edam: http://edamontology.org/format_4001 # NIFTI format
+  backward_warp:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1', single_end:false ]`
+      - "*_backward0_warp.nii.gz":
+          type: file
+          description: Backward deformation field, composed of all registration stages (inv-deformation+inv-affine).
+          pattern: "*_backward0_warp.nii.gz"
+          mandatory: false
+          ontologies:
+            - edam: http://edamontology.org/format_4001 # NIFTI format
+  segmentation_warped:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1', single_end:false ]`
+      - "*_warped_segmentation.nii.gz":
+          type: file
+          description: |
+            SynthSeg v2 (non-robust) segmentation + parcellation on the warped image.
+            Will produce image only if not passed as input.
+          pattern: "*_warped_segmentation.nii.gz"
+          mandatory: false
+          ontologies:
+            - edam: http://edamontology.org/format_4001 # NIFTI format
+  fixed_segmentation_warped:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1', single_end:false ]`
+      - "*_warped_reference_segmentation.nii.gz":
+          type: file
+          description: |
+            SynthSeg v2 (non-robust) segmentation + parcellation on the reference image.
+            Will produce image only if not passed as input.
+          pattern: "*_warped_reference_segmentation.nii.gz"
+          mandatory: false
+          ontologies:
+            - edam: http://edamontology.org/format_4001 # NIFTI format
+  versions:
+    - versions.yml:
+        type: file
+        description: File containing software versions
+        pattern: versions.yml
+        ontologies:
+          - edam: http://edamontology.org/format_3750 # YAML
+authors:
+  - "@ThoumyreStanislas"
+  - "@AlexVCaron"
+maintainers:
+  - "@ThoumyreStanislas"

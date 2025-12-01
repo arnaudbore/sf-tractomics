@@ -1,0 +1,67 @@
+{
+    "betcrop - synthstrip": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test__bet_image.nii.gz:md5,6f5eb365a11dfc52b8c80cd7bcee7b9d"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test__brain_mask.nii.gz:md5,52871114b59d09dca864cb0ea4f12832"
+                    ]
+                ],
+                "2": [
+                    "versions.yml:md5,75d1b1a94fe991e1e0e25a4cb899d745"
+                ],
+                "bet_image": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test__bet_image.nii.gz:md5,6f5eb365a11dfc52b8c80cd7bcee7b9d"
+                    ]
+                ],
+                "brain_mask": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test__brain_mask.nii.gz:md5,52871114b59d09dca864cb0ea4f12832"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,75d1b1a94fe991e1e0e25a4cb899d745"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-11-28T00:24:49.101635296"
+    },
+    "betcrop - synthstrip - stub-run": {
+        "content": [
+            [
+                "versions.yml:md5,75d1b1a94fe991e1e0e25a4cb899d745"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-11-28T00:25:10.867595936"
+    }
+}

@@ -1,0 +1,263 @@
+nextflow_workflow {
+
+    name "Test Subworkflow ANATOMICAL_SEGMENTATION"
+    script "../main.nf"
+    workflow "ANATOMICAL_SEGMENTATION"
+    config "./nextflow.config"
+
+    tag "subworkflows"
+    tag "subworkflows_nfneuro"
+    tag "subworkflows/anatomical_segmentation"
+
+    tag "segmentation"
+    tag "segmentation/fastseg"
+    tag "segmentation/freesurferseg"
+    tag "segmentation/synthseg"
+
+    tag "load_test_data"
+
+    tag "stub"
+    options "-stub-run"
+
+    setup {
+        run("LOAD_TEST_DATA", alias: "LOAD_DATA") {
+            script "../../load_test_data/main.nf"
+            process {
+                """
+                input[0] = Channel.from( [ "T1w.zip", "freesurfer_nifti.zip", "freesurfer.zip" ] )
+                input[1] = "test.load-test-data"
+                """
+            }
+        }
+    }
+
+    test("anatomical_segmentation - fslfast") {
+        when {
+            workflow {
+                """
+                ch_split_test_data = LOAD_DATA.out.test_data_directory
+                    .branch{
+                        t1w: it.simpleName == "T1w"
+                        freesurfer_nifti: it.simpleName == "freesurfer_nifti"
+                        freesurfer: it.simpleName == "freesurfer"
+                    }
+                input[0] = ch_split_test_data.t1w.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/T1w.nii.gz", checkIfExists: true)
+                    ]
+                }
+                input[1] = Channel.empty()
+                input[2] = Channel.empty()
+                input[3] = Channel.empty()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    workflow.out
+                        .findAll{ channel -> !channel.key.isInteger() && channel.value  }
+                        .collectEntries{ channel ->
+                            [(channel.key): ["versions"].contains(channel.key)
+                                ? channel.value
+                                : channel.value.collect{ subject ->
+                                    [ subject[0] ] + subject[1..-1].collect{ entry -> entry ? file(entry).name : "" }
+                            } ]
+                        }
+                ).match() },
+                { assert workflow.out
+                    .findAll{ channel -> !channel.key.isInteger() }
+                    .every{ channel -> ["wm_mask",
+                                        "gm_mask",
+                                        "csf_mask",
+                                        "wm_map",
+                                        "gm_map",
+                                        "csf_map",
+                                        "versions"].contains(channel.key)
+                        ? channel.value.every{ subject -> subject instanceof ArrayList
+                                ? subject.every()
+                                : subject }
+                        : channel.value.size() == 0 } }
+            )
+        }
+    }
+
+    test("anatomical_segmentation - freesurferseg") {
+        when {
+            workflow {
+                """
+                ch_split_test_data = LOAD_DATA.out.test_data_directory
+                    .branch{
+                        t1w: it.simpleName == "T1w"
+                        freesurfer_nifti: it.simpleName == "freesurfer_nifti"
+                        freesurfer: it.simpleName == "freesurfer"
+                    }
+                input[0] = Channel.empty()
+                input[1] = ch_split_test_data.freesurfer_nifti.map{
+                    test_data_directory -> [
+                        [ id:'test' ], // meta map
+                        file("\${test_data_directory}/aparc+aseg.nii.gz", checkIfExists: true),
+                        file("\${test_data_directory}/wmparc.nii.gz", checkIfExists: true)
+                    ]
+                }
+                input[2] = Channel.empty()
+                input[3] = Channel.empty()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out
+                        .findAll{ channel -> !channel.key.isInteger() && channel.value  }
+                        .collectEntries{ channel ->
+                            [(channel.key): ["versions"].contains(channel.key)
+                                ? channel.value
+                                : channel.value.collect{ subject ->
+                                    [ subject[0] ] + subject[1..-1].collect{ entry -> entry ? file(entry).name : "" }
+                            } ]
+                        }
+                ).match() },
+                { assert workflow.out
+                    .findAll{ !it.key.isInteger() }
+                    .every{ channel -> ["wm_mask",
+                                        "gm_mask",
+                                        "csf_mask",
+                                        "versions"].contains(channel.key)
+                        ? channel.value.every{ subject -> subject instanceof ArrayList
+                                ? subject.every()
+                                : subject }
+                        : channel.value.size() == 0 } }
+            )
+        }
+    }
+
+    test("anatomical_segmentation - both") {
+        when {
+            workflow {
+                """
+                ch_split_test_data = LOAD_DATA.out.test_data_directory
+                    .branch{
+                        t1w: it.simpleName == "T1w"
+                        freesurfer_nifti: it.simpleName == "freesurfer_nifti"
+                        freesurfer: it.simpleName == "freesurfer"
+                    }
+                input[0] = ch_split_test_data.t1w.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/T1w.nii.gz", checkIfExists: true)
+                    ]
+                }
+                input[1] = ch_split_test_data.freesurfer_nifti.map{
+                    test_data_directory -> [
+                        [ id:'test' ], // meta map
+                        file("\${test_data_directory}/aparc+aseg.nii.gz", checkIfExists: true),
+                        file("\${test_data_directory}/wmparc.nii.gz", checkIfExists: true)
+                    ]
+                }
+                input[2] = Channel.empty()
+                input[3] = Channel.empty()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out
+                        .findAll{ channel -> !channel.key.isInteger() && channel.value  }
+                        .collectEntries{ channel ->
+                            [(channel.key): ["versions"].contains(channel.key)
+                                ? channel.value
+                                : channel.value.collect{ subject ->
+                                    [ subject[0] ] + subject[1..-1].collect{ entry -> entry ? file(entry).name : "" }
+                            } ]
+                        }
+                ).match() },
+                { assert workflow.out
+                    .findAll{ !it.key.isInteger() }
+                    .every{ channel -> ["wm_mask",
+                                        "gm_mask",
+                                        "csf_mask",
+                                        "wm_map",
+                                        "gm_map",
+                                        "csf_map",
+                                        "versions"].contains(channel.key)
+                        ? channel.value.every{ subject -> subject instanceof ArrayList
+                                ? subject.every()
+                                : subject }
+                        : channel.value.size() == 0 } }
+            )
+        }
+    }
+
+    test("anatomical_segmentation - synthseg") {
+        config "./synthseg.config"
+        when {
+            workflow {
+                """
+                ch_split_test_data = LOAD_DATA.out.test_data_directory
+                    .branch{
+                        t1w: it.simpleName == "T1w"
+                        freesurfer_nifti: it.simpleName == "freesurfer_nifti"
+                        freesurfer: it.simpleName == "freesurfer"
+                    }
+                input[0] = ch_split_test_data.t1w.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/T1w.nii.gz", checkIfExists: true)
+                    ]
+                }
+                input[1] = Channel.empty()
+                input[2] = Channel.empty()
+                input[3] = ch_split_test_data.freesurfer.map{
+                    test_data_directory -> [
+                        file("\${test_data_directory}/license.txt", checkIfExists: true)
+                    ]
+                }
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    workflow.out
+                        .findAll{ channel -> !channel.key.isInteger() && channel.value  }
+                        .collectEntries{ channel ->
+                            [(channel.key): ["versions"].contains(channel.key)
+                                ? channel.value
+                                : channel.value.collect{ subject ->
+                                    [ subject[0] ] + subject[1..-1].collect{ entry -> entry ? file(entry).name : "" }
+                            } ]
+                        }
+                ).match() },
+                { assert workflow.out
+                    .findAll{ !it.key.isInteger() }
+                    .every{ channel -> ["wm_mask",
+                                        "gm_mask",
+                                        "csf_mask",
+                                        "wm_map",
+                                        "gm_map",
+                                        "csf_map",
+                                        "aparc_aseg",
+                                        "qc_score",
+                                        "resample",
+                                        "seg",
+                                        "volume",
+                                        "versions"].contains(channel.key)
+                        ? channel.value.every{ subject -> subject instanceof ArrayList
+                                ? subject.every()
+                                : subject }
+                        : channel.value.size() == 0 } }
+            )
+        }
+    }
+}

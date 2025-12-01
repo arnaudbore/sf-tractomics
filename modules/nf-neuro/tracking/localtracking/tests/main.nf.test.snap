@@ -1,0 +1,94 @@
+{
+    "tracking - localtracking - stub-run": {
+        "content": [
+            [
+                "versions.yml:md5,57f53115d05b0b9fe954ae1617ae2014"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "25.04.7"
+        },
+        "timestamp": "2025-09-22T22:41:55.481286285"
+    },
+    "tracking - localtracking - wm": {
+        "content": [
+            "test__local_tracking.trk",
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": false
+                    },
+                    "test__local_tracking_config.json:md5,5eac37e6262a85d8d1b33c92e1f35796"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": false
+                    },
+                    "test__local_seeding_mask.nii.gz:md5,0e098ec82a05ceaa2e94073510cbcdee"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": false
+                    },
+                    "test__local_tracking_mask.nii.gz:md5,0e098ec82a05ceaa2e94073510cbcdee"
+                ]
+            ],
+            [
+                "versions.yml:md5,78970d61ffd26ee69c4dda97a2ddcead"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "25.04.7"
+        },
+        "timestamp": "2025-09-22T22:41:28.48656546"
+    },
+    "tracking - localtracking - fa": {
+        "content": [
+            "test__local_tracking.trk",
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": false
+                    },
+                    "test__local_tracking_config.json:md5,6b2210436b4008b80969d2f08d0f0b68"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": false
+                    },
+                    "test__local_seeding_mask.nii.gz:md5,0484a2e44ff153caa79819a8646cc33c"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": false
+                    },
+                    "test__local_tracking_mask.nii.gz:md5,0484a2e44ff153caa79819a8646cc33c"
+                ]
+            ],
+            [
+                "versions.yml:md5,78970d61ffd26ee69c4dda97a2ddcead"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-11-20T05:37:36.463253726"
+    }
+}

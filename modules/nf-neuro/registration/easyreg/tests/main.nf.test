@@ -1,0 +1,108 @@
+nextflow_process {
+
+    name "Test Process REGISTRATION_EASYREG"
+    script "../main.nf"
+    process "REGISTRATION_EASYREG"
+
+    tag "modules"
+    tag "modules_nfneuro"
+    tag "registration"
+    tag "registration/easyreg"
+
+    tag "subworkflows"
+    tag "subworkflows/load_test_data"
+
+
+    setup {
+            run("LOAD_TEST_DATA", alias: "LOAD_DATA") {
+                script "../../../../../subworkflows/nf-neuro/load_test_data/main.nf"
+                process {
+                    """
+                    input[0] = Channel.from( [ "freesurfer.zip", "registration.zip" ] )
+                    input[1] = "test.load-test-data"
+                    """
+                }
+            }
+        }
+
+    test("registration - easyreg") {
+        config "./nextflow.config"
+        when {
+            process {
+                """
+                ch_split_test_data = LOAD_DATA.out.test_data_directory
+                    .branch{
+                        t1: it.simpleName == "freesurfer"
+                        b0: it.simpleName == "registration"
+                    }
+                ch_t1 = ch_split_test_data.t1.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/t1.nii.gz")
+                    ]
+                }
+                ch_b0 = ch_split_test_data.b0.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/b0.nii.gz")
+                    ]
+                }
+                input[0] = ch_t1
+                    .join(ch_b0)
+                    .map{ meta, t1, b0 -> [meta, t1, b0, [], []] }
+                """
+            }
+        }
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(
+                    file(process.out.fixed_segmentation_warped.get(0).get(1)).name,
+                    file(process.out.segmentation_warped.get(0).get(1)).name,
+                    niftiMD5SUM(process.out.fixed_warped.get(0).get(1), 6),
+                    niftiMD5SUM(process.out.image_warped.get(0).get(1), 6),
+                    niftiMD5SUM(process.out.forward_warp.get(0).get(1), 6),
+                    niftiMD5SUM(process.out.backward_warp.get(0).get(1), 6),
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("registration - easyreg - stub-run") {
+        tag "stub"
+        options "-stub-run"
+        when {
+            process {
+                """
+                ch_split_test_data = LOAD_DATA.out.test_data_directory
+                    .branch{
+                        t1: it.simpleName == "freesurfer"
+                        b0: it.simpleName == "registration"
+                    }
+                ch_t1 = ch_split_test_data.t1.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/t1.nii.gz")
+                    ]
+                }
+                ch_b0 = ch_split_test_data.b0.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/b0.nii.gz")
+                    ]
+                }
+                input[0] = ch_t1
+                    .join(ch_b0)
+                    .map{ meta, t1, b0 -> [meta, t1, b0, [], []] }
+                """
+            }
+        }
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out.versions).match() }
+            )
+        }
+    }
+}

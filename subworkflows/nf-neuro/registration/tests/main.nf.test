@@ -1,0 +1,270 @@
+nextflow_workflow {
+
+    name "Test Subworkflow REGISTRATION"
+    script "../main.nf"
+    workflow "REGISTRATION"
+    config "./nextflow.config"
+
+    tag "subworkflows"
+    tag "subworkflows_nfneuro"
+    tag "subworkflows/registration"
+
+    tag "registration"
+    tag "registration/anattodwi"
+    tag "registration"
+    tag "registration/ants"
+    tag "registration/convert"
+    tag "registration/easyreg"
+    tag "registration/synthmorph"
+
+    tag "load_test_data"
+
+    tag "stub"
+    options "-stub-run"
+
+    setup {
+        run("LOAD_TEST_DATA", alias: "LOAD_DATA") {
+            script "../../load_test_data/main.nf"
+            process {
+                """
+                input[0] = Channel.from( [ "freesurfer.zip", "T1w.zip", "b0.zip", "dti.zip", "others.zip" ] )
+                input[1] = "test.load-test-data"
+                """
+            }
+        }
+    }
+
+    test("registration - ANTs - Anat to DWI") {
+        config "./ants.config"
+        when {
+            workflow {
+                """
+                ch_split_test_data = LOAD_DATA.out.test_data_directory
+                    .branch{
+                        t1w: it.simpleName == "T1w"
+                        b0: it.simpleName == "b0"
+                        dti: it.simpleName == "dti"
+                    }
+                input[0] = ch_split_test_data.b0.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/b0.nii.gz")
+                    ]
+                }
+                input[1] = ch_split_test_data.t1w.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/T1w.nii.gz")
+                    ]
+                }
+                input[2] = ch_split_test_data.dti.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/fa.nii.gz")
+                    ]
+                }
+                input[3] = Channel.empty()
+                input[4] = Channel.empty()
+                input[5] = Channel.empty()
+                input[6] = Channel.empty()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    workflow.out
+                        .findAll{ channel -> !channel.key.isInteger() && channel.value  }
+                        .collectEntries{ channel ->
+                            [(channel.key): ["versions"].contains(channel.key)
+                                ? channel.value
+                                : channel.value.collect{ subject ->
+                                    [ subject[0] ] + subject[1..-1].flatten().collect{ entry -> entry ? file(entry).name : "" }
+                            } ]
+                        }
+                ).match() },
+                { assert workflow.out
+                    .findAll{ channel -> !channel.key.isInteger() }
+                    .every{ channel -> ["ref_warped",
+                                        "segmentation",
+                                        "ref_segmentation"].contains(channel.key)
+                        ? channel.value.size() == 0
+                        : channel.value.every{ subject -> subject instanceof ArrayList
+                            ? subject.every()
+                            : subject } } }
+            )
+        }
+    }
+
+    test("registration - ANTs - SyNQuick") {
+        config "./ants.config"
+        when {
+            workflow {
+                """
+                ch_split_test_data = LOAD_DATA.out.test_data_directory
+                    .branch{
+                        t1w: it.simpleName == "T1w"
+                        moving: it.simpleName == "others"
+                    }
+                input[0] = ch_split_test_data.t1w.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/T1w.nii.gz")
+                    ]}
+                input[1] = ch_split_test_data.moving.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/t1.nii.gz")
+                    ]}
+                input[2] = Channel.empty()
+                input[3] = ch_split_test_data.t1w.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/T1w_mask.nii.gz")
+                    ]}
+                input[4] = Channel.empty()
+                input[5] = Channel.empty()
+                input[6] = Channel.empty()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    workflow.out
+                        .findAll{ channel -> !channel.key.isInteger() && channel.value  }
+                        .collectEntries{ channel ->
+                            [(channel.key): ["versions"].contains(channel.key)
+                                ? channel.value
+                                : channel.value.collect{ subject ->
+                                    [ subject[0] ] + subject[1..-1].flatten().collect{ entry -> entry ? file(entry).name : "" }
+                            } ]
+                        }
+                ).match() },
+                { assert workflow.out
+                    .findAll{ channel -> !channel.key.isInteger() }
+                    .every{ channel -> ["ref_warped",
+                                        "segmentation",
+                                        "ref_segmentation"].contains(channel.key)
+                        ? channel.value.size() == 0
+                        : channel.value.every{ subject -> subject instanceof ArrayList
+                            ? subject.every()
+                            : subject } } }
+            )
+        }
+    }
+
+    test("registration - easyreg") {
+        config "./easyreg.config"
+        when {
+            workflow {
+                """
+                ch_split_test_data = LOAD_DATA.out.test_data_directory
+                    .branch{
+                        t1w: it.simpleName == "T1w"
+                        b0: it.simpleName == "b0"
+                    }
+                input[0] = ch_split_test_data.t1w.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/T1w.nii.gz")
+                    ]
+                }
+                input[1] = ch_split_test_data.b0.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/b0.nii.gz")
+                    ]
+                }
+                input[2] = Channel.empty()
+                input[3] = Channel.empty()
+                input[4] = Channel.empty()
+                input[5] = Channel.empty()
+                input[6] = Channel.empty()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    workflow.out
+                        .findAll{ channel -> !channel.key.isInteger() && channel.value  }
+                        .collectEntries{ channel ->
+                            [(channel.key): ["versions"].contains(channel.key)
+                                ? channel.value
+                                : channel.value.collect{ subject ->
+                                    [ subject[0] ] + subject[1..-1].flatten().collect{ entry -> entry ? file(entry).name : "" }
+                            } ]
+                        }
+                ).match() }
+            )
+        }
+    }
+
+    test("registration - Synthmorph") {
+        config "./synthmorph.config"
+        when {
+            workflow {
+                """
+                ch_split_test_data = LOAD_DATA.out.test_data_directory
+                    .branch{
+                        t1w: it.simpleName == "T1w"
+                        b0: it.simpleName == "b0"
+                        freesurfer: it.simpleName == "freesurfer"
+                    }
+                input[0] = ch_split_test_data.t1w.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/T1w.nii.gz")
+                    ]
+                }
+                input[1] = ch_split_test_data.b0.map{
+                    test_data_directory -> [
+                        [ id:'test' ],
+                        file("\${test_data_directory}/b0.nii.gz")
+                    ]
+                }
+                input[2] = Channel.empty()
+                input[3] = Channel.empty()
+                input[4] = Channel.empty()
+                input[5] = Channel.empty()
+                input[6] = ch_split_test_data.freesurfer.map{
+                    test_data_directory -> file("\${test_data_directory}/license.txt")
+                }
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    workflow.out
+                        .findAll{ channel -> !channel.key.isInteger() && channel.value  }
+                        .collectEntries{ channel ->
+                            [(channel.key): ["versions"].contains(channel.key)
+                                ? channel.value
+                                : channel.value.collect{ subject ->
+                                    [ subject[0] ] + subject[1..-1].flatten().collect{ entry -> entry ? file(entry).name : "" }
+                            } ]
+                        }
+                ).match() },
+                { assert workflow.out
+                    .findAll{ channel -> !channel.key.isInteger() }
+                    .every{ channel -> ["ref_warped",
+                                        "segmentation",
+                                        "ref_segmentation"].contains(channel.key)
+                        ? channel.value.size() == 0
+                        : channel.value.every{ subject -> subject instanceof ArrayList
+                            ? subject.every()
+                            : subject } } }
+            )
+        }
+    }
+}
