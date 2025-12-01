@@ -1,5 +1,5 @@
 //
-// Subworkflow with functionality specific to the scilus/nf-tractoflow pipeline
+// Subworkflow with functionality specific to the scilus/sf-tractomics pipeline
 //
 
 /*
