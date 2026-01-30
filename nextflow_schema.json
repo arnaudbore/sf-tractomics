@@ -168,11 +168,11 @@
                     "description": "Run Gibbs correction.",
                     "help_text": "Run Gibbs correction."
                 },
-		"run_synthstrip_dwi": {
+                "run_synthstrip_dwi": {
                     "type": "boolean",
                     "description": "Run Synthstrip for BET DWI.",
                     "help_text": "Run Synthstrip for BET DWI."
-		},
+                },
                 "run_topup": {
                     "type": "boolean",
                     "default": true,
@@ -873,7 +873,7 @@
                     "type": "boolean",
                     "hidden": true
                 },
-		"preproc_dwi_run_synthstrip": {
+                "preproc_dwi_run_synthstrip": {
                     "type": "boolean",
                     "hidden": true
                 },
