@@ -270,7 +270,7 @@ workflow SF_TRACTOMICS {
         )
     }
 
-    if ( params.output_template_space && ( !params.template || !params.template_resolution ) ) {
+    if ( params.output_template_space && ( !params.template || !params.templateflow_res ) ) {
         error "Both params.template and params.template_resolution must be provided to output data in template space."
     }
     else if ( params.output_template_space ) {
