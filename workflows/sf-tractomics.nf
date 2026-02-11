@@ -239,11 +239,7 @@ workflow SF_TRACTOMICS {
                     def dest_file = file("${workflow.workDir}/${dest_name}")
 
                     if (!dest_file.exists()) {
-                        java.nio.file.Files.copy(
-                            ref_file,
-                            dest_file,
-                            java.nio.file.StandardCopyOption.REPLACE_EXISTING
-                        )
+                        ref_file.copyTo(dest_file)
                     }
 
                     return dest_file
