@@ -326,8 +326,8 @@ workflow SF_TRACTOMICS {
         )
     }
 
-    if ( params.output_template_space && ( !params.template || !params.templateflow_res ) ) {
-        error "Both params.template and params.template_resolution must be provided to output data in template space."
+    if ( params.output_template_space && ( !params.template || !params.templateflow_resolution ) ) {
+        error "Both params.template and params.templateflow_resolution must be provided to output data in template space."
     }
     else if ( params.output_template_space ) {
         OUTPUT_TEMPLATE_SPACE(
@@ -340,7 +340,7 @@ workflow SF_TRACTOMICS {
             [
                 template: params.template,
                 templateflow_home: params.templateflow_home,
-                template_res: params.template_resolution,
+                template_res: params.templateflow_resolution,
                 templateflow_cohort: params.templateflow_cohort,
                 run_easyreg: params.run_easyreg,
                 run_synthmorph: params.run_synthmorph
