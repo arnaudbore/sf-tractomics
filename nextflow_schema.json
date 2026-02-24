@@ -143,8 +143,15 @@
                 },
                 "run_gibbs_correction": {
                     "type": "boolean",
-                    "description": "RRun Gibbs correction.",
-                    "help_text": "RRun Gibbs correction."
+                    "default": false,
+                    "description": "Run Gibbs correction.",
+                    "help_text": "Run Gibbs correction."
+                },
+                "run_dwi_n4": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Run DWI N4 bias correction.",
+                    "help_text": "Run DWI N4 bias correction."
                 },
                 "run_topup": {
                     "type": "boolean",
@@ -210,6 +217,12 @@
                     "help_text": "Fractional Intensity threshold for final brain masking.",
                     "minimum": -1,
                     "maximum": 1
+                },
+                "run_dwi_normalize": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Run DWI normalization.",
+                    "help_text": "Run DWI normalization."
                 },
                 "fa_mask_threshold": {
                     "type": "number",

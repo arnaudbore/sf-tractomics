@@ -371,7 +371,8 @@
                             "preproc_t1",
                             "registration",
                             "topup_eddy",
-                            "tractoflow"
+                            "tractoflow",
+                            "reconst_fw_noddi"
                         ]
                     }
                 }
