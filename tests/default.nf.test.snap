@@ -84,9 +84,6 @@
                     "scilpy": "2.2.1",
                     "jq": 1.7
                 },
-                "THR_BUNDLE_MASK": {
-                    "scilpy": "2.2.1"
-                },
                 "TRACKING_LOCALTRACKING": {
                     "scilpy": "2.2.0"
                 },
@@ -127,16 +124,12 @@
                 "pipeline_info",
                 "sub-test-1",
                 "sub-test-1/anat",
-                "sub-test-1/anat/sub-test-1_T1w.nii.gz",
-                "sub-test-1/anat/sub-test-1_desc-brain_mask.nii.gz",
                 "sub-test-1/anat/sub-test-1_label-CSF_desc-fastseg_mask.nii.gz",
                 "sub-test-1/anat/sub-test-1_label-CSF_desc-fastseg_probseg.nii.gz",
                 "sub-test-1/anat/sub-test-1_label-GM_desc-fastseg_mask.nii.gz",
                 "sub-test-1/anat/sub-test-1_label-GM_desc-fastseg_probseg.nii.gz",
                 "sub-test-1/anat/sub-test-1_label-WM_desc-fastseg_mask.nii.gz",
                 "sub-test-1/anat/sub-test-1_label-WM_desc-fastseg_probseg.nii.gz",
-                "sub-test-1/anat/sub-test-1_space-T1w_desc-brain_mask.nii.gz",
-                "sub-test-1/anat/sub-test-1_space-T1w_desc-preproc_T1w.nii.gz",
                 "sub-test-1/anat/sub-test-1_space-dwi_desc-preproc_T1w.nii.gz",
                 "sub-test-1/dwi",
                 "sub-test-1/dwi/bundles",
@@ -148,7 +141,6 @@
                 "sub-test-1/dwi/sub-test-1_desc-ensemble_tractogram.trk",
                 "sub-test-1/dwi/sub-test-1_desc-local_tractogram.trk",
                 "sub-test-1/dwi/sub-test-1_desc-pft_tractogram.trk",
-                "sub-test-1/dwi/sub-test-1_desc-preproc_b0.nii.gz",
                 "sub-test-1/dwi/sub-test-1_desc-preproc_dwi.bval",
                 "sub-test-1/dwi/sub-test-1_desc-preproc_dwi.bvec",
                 "sub-test-1/dwi/sub-test-1_desc-preproc_dwi.nii.gz",
@@ -221,6 +213,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-02-06T16:50:14.429130199"
+        "timestamp": "2026-02-24T12:32:34.621226368"
     }
 }

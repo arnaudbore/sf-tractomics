@@ -336,7 +336,16 @@ workflow SF_TRACTOMICS {
             channel.empty(),
             channel.empty(),
             ch_bundle_seg,
-            channel.empty())
+            channel.empty(),
+            [
+                template: params.template,
+                templateflow_home: params.templateflow_home,
+                template_res: params.template_resolution,
+                templateflow_cohort: params.templateflow_cohort,
+                run_easyreg: params.run_easyreg,
+                run_synthmorph: params.run_synthmorph
+            ]
+        )
         ch_versions = ch_versions.mix(OUTPUT_TEMPLATE_SPACE.out.versions)
     }
 
