@@ -152,12 +152,12 @@
                     },
                     "qc/multiqc": {
                         "branch": "main",
-                        "git_sha": "8bc2ced91049698a66497e9ba875385f0b9f2b77",
+                        "git_sha": "43d0739c2920cc414373454a3f30c553e426bada",
                         "installed_by": ["modules"]
                     },
                     "qc/tractogram": {
                         "branch": "main",
-                        "git_sha": "a06b4cd80dbbd56a2793974ff757249d4e8714dd",
+                        "git_sha": "ca21922a7affe217f7391a98b5af1e50a79f094c",
                         "installed_by": ["modules"]
                     },
                     "reconst/diffusivitypriors": {
@@ -172,7 +172,7 @@
                     },
                     "reconst/fodf": {
                         "branch": "main",
-                        "git_sha": "0fdd04fbe05e37bfe1273d23e1d49018297ea7de",
+                        "git_sha": "ca21922a7affe217f7391a98b5af1e50a79f094c",
                         "installed_by": ["tractoflow"]
                     },
                     "reconst/freewater": {
@@ -192,7 +192,7 @@
                     },
                     "reconst/meanfrf": {
                         "branch": "main",
-                        "git_sha": "f9676160a7d9e71ad072c39f32bcc7e7f1621d7a",
+                        "git_sha": "ca21922a7affe217f7391a98b5af1e50a79f094c",
                         "installed_by": ["tractoflow"]
                     },
                     "reconst/noddi": {
@@ -207,7 +207,7 @@
                     },
                     "reconst/shsignal": {
                         "branch": "main",
-                        "git_sha": "f9676160a7d9e71ad072c39f32bcc7e7f1621d7a",
+                        "git_sha": "ca21922a7affe217f7391a98b5af1e50a79f094c",
                         "installed_by": ["modules"]
                     },
                     "registration/anattodwi": {
@@ -227,17 +227,17 @@
                     },
                     "registration/convert": {
                         "branch": "main",
-                        "git_sha": "5865aa6a296886ce6165c8ffe27e05215fc708cd",
+                        "git_sha": "9479d507a11b2cfafcaf836c476272bc63a96376",
                         "installed_by": ["registration"]
                     },
                     "registration/easyreg": {
                         "branch": "main",
-                        "git_sha": "cc32b2a11a13ff04ff95508efad4ef4cd0d3909c",
+                        "git_sha": "ca21922a7affe217f7391a98b5af1e50a79f094c",
                         "installed_by": ["registration"]
                     },
                     "registration/synthmorph": {
                         "branch": "main",
-                        "git_sha": "cc32b2a11a13ff04ff95508efad4ef4cd0d3909c",
+                        "git_sha": "9479d507a11b2cfafcaf836c476272bc63a96376",
                         "installed_by": ["registration"]
                     },
                     "segmentation/fastseg": {
@@ -262,17 +262,17 @@
                     },
                     "tracking/localtracking": {
                         "branch": "main",
-                        "git_sha": "2e214a7c8e447a2304cf882d69740795bc1574a6",
+                        "git_sha": "ac004b3f47ecb0cb22c053ee8cadfdfa69565269",
                         "installed_by": ["tractoflow"]
                     },
                     "tracking/pfttracking": {
                         "branch": "main",
-                        "git_sha": "63dc80c43cdca798a5f11cd5124da35337a94ac5",
+                        "git_sha": "d5eb15b16ebf16c5f86edd06f782afc8ac711a1c",
                         "installed_by": ["tractoflow"]
                     },
                     "tractogram/math": {
                         "branch": "main",
-                        "git_sha": "5435f43bcda7f9a32d101137af36a9272d54f58e",
+                        "git_sha": "ca21922a7affe217f7391a98b5af1e50a79f094c",
                         "installed_by": ["modules"]
                     },
                     "tractogram/removeinvalid": {
