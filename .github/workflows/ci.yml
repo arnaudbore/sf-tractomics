@@ -32,9 +32,9 @@ jobs:
           - "25.04.6"
           - "latest-everything"
         profile:
-          - "conda"
+          # - "conda"  # No conda in nf-neuro, to come eventually ...
           - "docker"
-          - "singularity"
+          # - "singularity" # We are able to build .sif, but not able to run singularity/apptainer containers yet ...
         test_name:
           - "test"
         isMaster:
