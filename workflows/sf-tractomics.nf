@@ -15,7 +15,7 @@ include { QC_TRACTOGRAM as QC_ENSEMBLE } from '../modules/nf-neuro/qc/tractogram
 include { ATLAS_IIT              } from '../subworkflows/nf-neuro/atlas_iit/main'
 include { RECONST_SHSIGNAL       } from '../modules/nf-neuro/reconst/shsignal'
 include { RECONST_FW_NODDI       } from '../subworkflows/nf-neuro/reconst_fw_noddi/main'
-include { BUNDLE_SEG             } from '../subworkflows/nf-neuro/bundle_seg/main' addParams(run_easyreg: false)
+include { BUNDLE_SEG             } from '../subworkflows/nf-neuro/bundle_seg/main'
 include { STATS_METRICSINROI     } from '../modules/nf-neuro/stats/metricsinroi/main'
 include { ATLAS_ROIMETRICS       } from '../subworkflows/nf-neuro/atlas_roimetrics/main'
 include { TRACTOMETRY            } from '../subworkflows/nf-neuro/tractometry/main'
@@ -50,6 +50,7 @@ workflow SF_TRACTOMICS {
     ch_topup_config = channel.empty()
     ch_bet_template = channel.empty()
     ch_bet_probability = channel.empty()
+    ch_synthstrip_weights = channel.empty()
 
     /* Load topup config if provided */
     if ( params.config_topup ) {
@@ -63,35 +64,61 @@ workflow SF_TRACTOMICS {
 
     /* Load bet template */
     template_directory = file(params.template_t1 ?: "$projectDir/assets/templates/mni_152_sym_09c/t1")
-    if (template_directory.exists() && template_directory.isDirectory()){
-        ch_bet_template = ch_t1.map{ it[0] }
+    if ( template_directory.exists() && template_directory.isDirectory() ){
+        ch_bet_template = ch_t1.map{ meta, _t1 ->  meta}
             .combine(channel.fromPath(template_directory / "t1_template.nii.gz"))
-        ch_bet_probability = ch_t1.map{ it[0] }
+        ch_bet_probability = ch_t1.map{ meta, _t1 ->  meta }
             .combine(channel.fromPath(template_directory / "t1_brain_probability_map.nii.gz"))
     }
     else {
         error "A T1w template is required for brain extraction. Provide its directory with params.template_t1."
     }
 
+    if ( params.synthstrip_weights ) {
+        ch_synthstrip_weights = channel.fromPath(params.synthstrip_weights, checkIfExists: true)
+    }
+
     TRACTOFLOW(
         ch_dwi_bval_bvec,
         ch_t1,
         ch_b0
-            .filter{ it[1] },
+            .filter{ it -> it[1] },
         ch_rev_dwi_bval_bvec
-            .filter{ it[1] },
+            .filter{ it -> it[1] },
         ch_rev_b0
-            .filter{ it[1] },
+            .filter{ it -> it[1] },
         ch_wmparc
-            .filter{ it[1] },
+            .filter{ it -> it[1] },
         ch_aparc_aseg
-            .filter{ it[1] },
+            .filter{ it -> it[1] },
         ch_topup_config,
         ch_bet_template,
         ch_bet_probability,
-        channel.empty(),
+        ch_synthstrip_weights,
         ch_lesion
-            .filter{ it[1] }
+            .filter{ it -> it[1] },
+        [
+            "preproc_dwi_run_denoising": params.run_dwi_denoising,
+            "preproc_dwi_run_degibbs": params.run_gibbs_correction,
+            "topup_eddy_run_topup": params.run_topup,
+            "topup_eddy_run_eddy": params.run_eddy,
+            "preproc_dwi_run_synthstrip": params.run_dwi_synthstrip,
+            "preproc_dwi_keep_dwi_with_skull": params.keep_dwi_with_skull,
+            "preproc_dwi_run_N4": params.run_dwi_N4,
+            "preproc_dwi_run_normalize": params.run_dwi_normalize,
+            "preproc_dwi_run_resampling": params.run_dwi_resampling,
+            "preproc_t1_run_denoising": params.run_t1_denoising,
+            "preproc_t1_run_N4": params.run_t1_N4,
+            "preproc_t1_run_resample": params.run_t1_resampling,
+            "preproc_t1_run_synthstrip": params.run_t1_synthstrip,
+            "preproc_t1_run_ants_bet": params.run_t1_ants_bet,
+            "preproc_t1_run_crop": params.run_t1_crop,
+            "frf_average_from_data": params.mean_frf,
+            "run_qball": params.run_qball,
+            "use_qball_for_tracking": params.use_qball_for_tracking,
+            "run_pft_tracking": params.run_pft_tracking,
+            "run_local_tracking": params.run_local_tracking
+        ]
     )
     ch_versions = ch_versions.mix(TRACTOFLOW.out.versions)
     ch_sub_multiqc_files = ch_sub_multiqc_files.mix(TRACTOFLOW.out.mqc)
@@ -101,7 +128,7 @@ workflow SF_TRACTOMICS {
     // Ensemble tracking
     //
     ch_input_tracking_qc = channel.empty()
-    if (params.run_local_tracking && params.run_pft_tracking) {
+    if ( params.run_local_tracking && params.run_pft_tracking ) {
         ch_tractogram_math_input = TRACTOFLOW.out.pft_tractogram
             .join(TRACTOFLOW.out.local_tractogram)
             .map {
@@ -110,7 +137,7 @@ workflow SF_TRACTOMICS {
         ENSEMBLE_TRACKING(ch_tractogram_math_input)
         ch_input_tracking_qc = ENSEMBLE_TRACKING.out.trk
     }
-    else if (params.run_local_tracking || params.run_pft_tracking) {
+    else if ( params.run_local_tracking || params.run_pft_tracking ) {
         ch_input_tracking_qc = TRACTOFLOW.out.pft_tractogram
             .mix(TRACTOFLOW.out.local_tractogram)
     }
@@ -127,10 +154,10 @@ workflow SF_TRACTOMICS {
     //
     // Run RECONST/SH_METRICS
     //
-    if (params.sh_fitting) {
+    if ( params.sh_fitting ) {
         RECONST_SHSIGNAL(
             TRACTOFLOW.out.dwi
-                .map{ it + [[]] }
+                .map{ it -> it + [[]] }
         )
     }
 
@@ -138,16 +165,18 @@ workflow SF_TRACTOMICS {
     // Run BundleSeg
     //
     ch_bundle_seg = channel.empty()
-    if (params.run_bundle_seg) {
-        ch_input_bundle_seg = TRACTOFLOW.out.pft_tractogram
-            .mix(TRACTOFLOW.out.local_tractogram)
-            .groupTuple()
+    if ( params.run_bundle_seg ) {
         BUNDLE_SEG(
             TRACTOFLOW.out.dti_fa,
             TRACTOFLOW.out.pft_tractogram
                 .mix(TRACTOFLOW.out.local_tractogram)
                 .groupTuple(),
-            channel.empty()
+            channel.empty(),
+            [
+                "run_easyreg": false, // BundleSeg does not support easyreg, so we set it to false to avoid confusion
+                "run_synthmorph": params.run_synthmorph,
+                "atlas_directory": params.atlas_directory
+            ]
         )
 
         ch_versions = ch_versions.mix(BUNDLE_SEG.out.versions)
@@ -169,7 +198,7 @@ workflow SF_TRACTOMICS {
     //
     // Run RECONST/NODDI & RECONST/FREEWATER
     //
-    if (params.run_noddi || params.run_freewater) {
+    if ( params.run_noddi || params.run_freewater ) {
         // TODO: support subject-specific diffusivity options
         RECONST_FW_NODDI(
             TRACTOFLOW.out.dwi,
@@ -183,6 +212,10 @@ workflow SF_TRACTOMICS {
                 iso_diff: params.iso_diff ? channel.value(params.iso_diff) : channel.empty(),
                 perp_diff_min: params.perp_diff_min ? channel.value(params.perp_diff_min) : channel.empty(),
                 perp_diff_max: params.perp_diff_max ? channel.value(params.perp_diff_max) : channel.empty()
+            ],
+            [
+                run_noddi: params.run_noddi,
+                run_freewater: params.run_freewater
             ]
         )
         ch_versions = ch_versions.mix(RECONST_FW_NODDI.out.versions)
@@ -207,11 +240,16 @@ workflow SF_TRACTOMICS {
         return [meta, metrics]
     }
 
-    if (params.run_atlas_roimetrics) {
+    if ( params.run_atlas_roimetrics ) {
         ATLAS_ROIMETRICS(
             mergeCovariatesIntoMeta(TRACTOFLOW.out.b0, ch_covariates),
             mergeCovariatesIntoMeta(ch_input_metrics, ch_covariates),
-            [ use_atlas_iit: params.use_atlas_iit ]
+            [
+                use_atlas_iit: params.use_atlas_iit,
+                use_binary_masks: params.use_binary_masks,
+                atlas_iit_b0: params.atlas_iit_b0,
+                atlas_iit_bundle_masks_dir: params.atlas_iit_bundle_masks_dir
+            ]
         )
         ch_versions = ch_versions.mix(ATLAS_ROIMETRICS.out.versions)
 
@@ -229,7 +267,7 @@ workflow SF_TRACTOMICS {
         ch_global_multiqc_files = ch_global_multiqc_files.mix(ch_collection_mean_input)
 
 
-        if (params.harmonization_reference) {
+        if ( params.harmonization_reference ) {
             // The QC expects the harmonization reference to have the following pattern: *.reference.tsv
             // So we copy the file in the workflow workdir with the expected name pattern. If the file
             // already has the expected name pattern, this step will simply create a copy of the file.
@@ -238,7 +276,7 @@ workflow SF_TRACTOMICS {
                     def dest_name = ref_file.name.endsWith('.reference.tsv') ? ref_file.name : ref_file.name.replaceAll(/\.tsv$/, '.reference.tsv')
                     def dest_file = file("${workflow.workDir}/${dest_name}")
 
-                    if (!dest_file.exists()) {
+                    if ( !dest_file.exists() ) {
                         ref_file.copyTo(dest_file)
                     }
 
@@ -293,8 +331,8 @@ workflow SF_TRACTOMICS {
         )
     }
 
-    if ( params.output_template_space && ( !params.template || !params.templateflow_res ) ) {
-        error "Both params.template and params.template_resolution must be provided to output data in template space."
+    if ( params.output_template_space && ( !params.template || !params.templateflow_resolution ) ) {
+        error "Both params.template and params.templateflow_resolution must be provided to output data in template space."
     }
     else if ( params.output_template_space ) {
         OUTPUT_TEMPLATE_SPACE(
@@ -303,7 +341,16 @@ workflow SF_TRACTOMICS {
             channel.empty(),
             channel.empty(),
             ch_bundle_seg,
-            channel.empty())
+            channel.empty(),
+            [
+                template: params.template,
+                templateflow_home: params.templateflow_home,
+                templateflow_res: params.templateflow_resolution,
+                templateflow_cohort: params.templateflow_cohort,
+                run_easyreg: params.run_easyreg,
+                run_synthmorph: params.run_synthmorph
+            ]
+        )
         ch_versions = ch_versions.mix(OUTPUT_TEMPLATE_SPACE.out.versions)
     }
 
@@ -375,7 +422,7 @@ workflow SF_TRACTOMICS {
     qc_files = ch_sub_multiqc_files
         .groupTuple()
         .map{ meta, files ->
-            def f = files.flatten().findAll { it != null }
+            def f = files.flatten().findAll { it -> it != null }
             return tuple(meta, f)
         }
 
@@ -391,9 +438,9 @@ workflow SF_TRACTOMICS {
 
     ch_fd_files = ch_sub_multiqc_files
         .filter { _meta, files ->
-            files.any { it.name.contains("dwi_eddy_restricted_movement_rms") }
+            files.any { it -> it.name.contains("dwi_eddy_restricted_movement_rms") }
         }
-        .map{ it[1] }
+        .map{ it -> it[1] }
     ch_global_multiqc_files = ch_global_multiqc_files.mix(ch_fd_files.flatten())
     ch_global_multiqc_files = ch_global_multiqc_files.mix(ch_multiqc_files)
 

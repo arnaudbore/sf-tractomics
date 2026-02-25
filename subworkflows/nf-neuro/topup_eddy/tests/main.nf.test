@@ -13,7 +13,8 @@ nextflow_workflow {
     tag "preproc/topup"
     tag "preproc/eddy"
     tag "utils/extractb0"
-    tag "betcrop/fslbetcrop"
+
+    tag "subworkflows/utils_options"
 
     tag "load_test_data"
 
@@ -33,7 +34,6 @@ nextflow_workflow {
     }
 
     test("topup_eddy - ONLY Eddy - AP DWI | PA sbref") {
-
         when {
             workflow {
                 """
@@ -52,10 +52,13 @@ nextflow_workflow {
                 input[2] = channel.from( [] )
                 input[3] = channel.from( [] )
                 input[4] = channel.from( [] )
+                input[5] = [
+                    "topup_eddy_run_topup": false,
+                    "topup_eddy_run_eddy": true
+                ]
                 """
             }
         }
-
         then {
             assertAll(
                 { assert workflow.success },
@@ -104,10 +107,13 @@ nextflow_workflow {
                         file("\${test_data_directory}/sub-01_dir-PA_sbref.nii.gz")
                     ]}
                 input[4] = channel.from( [] )
+                input[5] = [
+                    "topup_eddy_run_topup": true,
+                    "topup_eddy_run_eddy": true
+                ]
                 """
             }
         }
-
         then {
             assertAll(
                 { assert workflow.success },
@@ -127,7 +133,6 @@ nextflow_workflow {
     }
 
     test("topup_eddy - AP DWI+sbref | PA DWI+sbref") {
-
         when {
             workflow {
                 """
@@ -156,10 +161,13 @@ nextflow_workflow {
                         file("\${test_data_directory}/sub-01_dir-PA_sbref.nii.gz")
                     ]}
                 input[4] = channel.from( [] )
+                input[5] = [
+                    "topup_eddy_run_topup": true,
+                    "topup_eddy_run_eddy": true
+                ]
                 """
             }
         }
-
         then {
             assertAll(
                 { assert workflow.success },
