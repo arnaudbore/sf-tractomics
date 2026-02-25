@@ -326,8 +326,8 @@
                     },
                     "atlas_iit": {
                         "branch": "main",
-                        "git_sha": "3582ff7b16ad2ac316a037c089f890f686356986",
-                        "installed_by": ["atlas_roimetrics", "subworkflows"]
+                        "git_sha": "d91ea8099cd5dceaff0be19fdd6b835f2b95e6f0",
+                        "installed_by": ["atlas_roimetrics"]
                     },
                     "atlas_roimetrics": {
                         "branch": "main",
@@ -404,11 +404,11 @@
                             "bundle_seg",
                             "output_template_space",
                             "preproc_dwi",
+                            "preproc_t1",
                             "reconst_fw_noddi",
                             "registration",
                             "topup_eddy",
-                            "tractoflow",
-                            "preproc_t1"
+                            "tractoflow"
                         ]
                     }
                 }
