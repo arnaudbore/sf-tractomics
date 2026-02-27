@@ -215,7 +215,8 @@ workflow SF_TRACTOMICS {
             ],
             [
                 run_noddi: params.run_noddi,
-                run_freewater: params.run_freewater
+                run_freewater: params.run_freewater,
+                silence_single_shell_warnings: params.noddi_silence_single_shell_warnings
             ]
         )
         ch_versions = ch_versions.mix(RECONST_FW_NODDI.out.versions)
