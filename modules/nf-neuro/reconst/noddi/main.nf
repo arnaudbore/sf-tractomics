@@ -31,14 +31,14 @@ process RECONST_NODDI {
     def set_kernels = kernels ? "--load_kernels $kernels" : "--save_kernels kernels/"
     def set_mask = mask ? "--mask $mask" : ""
     def compute_only = task.ext.compute_only && !kernels ? "--compute_only" : ""
-    def ignore_single_shell = task.ext.ignore_single_shell ?: true
+    def ignore_single_shell = task.ext.ignore_single_shell ?: false
 
     """
     # Set home directory. This is problematic if the container is run
     # with non-root user which does not create a home directory, whilst
     # AMICO attempts to write in the home directory, raising an error.
     export HOME=/tmp
-    
+
     # Check if data are multi-shell based on b-values and set number of clusters accordingly
     # Set tolerance threshold (default 40 if not specified)
     b_threshold=${task.ext.b_thr ?: 40}
