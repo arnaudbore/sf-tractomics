@@ -1217,6 +1217,11 @@
             "default": true,
             "description": "If there's multiple T1w images for a single single DWI run, this option will try to match the T1w and DWI runs based on their run number.",
             "help_text": "If there's multiple T1w images for a single single DWI run, this option will try to match the T1w and DWI runs based on their run number."
+        },
+        "noddi_ignore_single_shell": {
+            "type": "boolean",
+            "description": "If enabled, the subjects with single shell DWI acquisitions will be ignored in the NODDI fitting and will not fail the pipeline.",
+            "help_text": "If enabled, the subjects with single shell DWI acquisitions will be ignored in the NODDI fitting and will not fail the pipeline."
         }
     }
 }
