@@ -277,7 +277,7 @@
                     },
                     "stats/metricsinroi": {
                         "branch": "main",
-                        "git_sha": "459c17f0b02a95abacb29d3145fdbaab98b45c01",
+                        "git_sha": "cd4ae4fe4544a8d9433ae84dad15ae3be8e1993e",
                         "installed_by": ["atlas_roimetrics", "modules"]
                     },
                     "tracking/localtracking": {
