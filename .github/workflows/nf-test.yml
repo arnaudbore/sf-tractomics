@@ -66,7 +66,9 @@ jobs:
       fail-fast: false
       matrix:
         shard: ${{ fromJson(needs.nf-test-changes.outputs.shard) }}
-        profile: [conda, docker, singularity]
+        # We only run the tests against docker, we don't use conda and the cluster doesn't support singularity
+        profile: # [conda, docker, singularity]
+          - docker
         isMain:
           - ${{ github.base_ref == 'master' || github.base_ref == 'main' }}
         # Exclude conda and singularity on dev

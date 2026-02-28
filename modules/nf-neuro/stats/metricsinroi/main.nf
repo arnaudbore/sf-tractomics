@@ -2,7 +2,7 @@ process STATS_METRICSINROI {
     tag "$meta.id"
     label 'process_single'
 
-    container "scilus/scilpy:dev"
+    container "scilus/scilpy:2.2.2_cpu"
 
     input:
     tuple val(meta), path(metrics), path(rois), path(rois_lut)  /* optional, input = [] */
@@ -26,7 +26,7 @@ process STATS_METRICSINROI {
     def value_substrs_to_remove = task.ext.value_substrs_to_remove ?: []
 
     def meta_columns = task.ext.meta_columns ?: []
-    def meta_columns_values  = meta_columns.collect { col -> meta.containsKey(col) ? meta[col] : "null" }
+    def meta_columns_values  = meta_columns.collect { col -> meta.containsKey(col) && meta[col] ? meta[col] : "null" }
 
     def output_format = task.ext.output_format ?: 'tsv'  // 'csv' or 'tsv'
 
