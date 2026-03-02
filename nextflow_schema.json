@@ -53,7 +53,8 @@
                     "type": "boolean",
                     "description": "If set, it will remove all the participants that are missing any information.",
                     "fa_icon": "fas fa-wrench",
-                    "help_text": "If set, it will remove all the participants that are missing any information."
+                    "help_text": "If set, it will remove all the participants that are missing any information.",
+                    "default": false
                 },
                 "b0_thr_extract_b0": {
                     "type": "integer",
@@ -122,11 +123,13 @@
                 },
                 "help_full": {
                     "type": "boolean",
-                    "description": "Display the full detailed help message."
+                    "description": "Display the full detailed help message.",
+                    "default": false
                 },
                 "show_hidden": {
                     "type": "boolean",
-                    "description": "Display hidden parameters in the help message (only works when --help or --help_full are provided)."
+                    "description": "Display hidden parameters in the help message (only works when --help or --help_full are provided).",
+                    "default": false
                 }
             }
         },
@@ -135,10 +138,17 @@
             "type": "object",
             "description": "All parameters related to DWI preprocessing.",
             "properties": {
+                "keep_dwi_with_skull": {
+                    "type": "boolean",
+                    "description": "Keep DWI in native space with skull when reconstructing local models and tractograms.",
+                    "help_text": "Keep DWI in native space with skull when reconstructing local models and tractograms.",
+                    "default": false
+                },
                 "run_dwi_synthstrip": {
                     "type": "boolean",
                     "description": "Run Synthstrip for BET DWI.",
-                    "help_text": "Run Synthstrip for BET DWI."
+                    "help_text": "Run Synthstrip for BET DWI.",
+                    "default": false
                 },
                 "synthstrip_weights": {
                     "type": "string",
@@ -269,12 +279,14 @@
                 "run_qball": {
                     "type": "boolean",
                     "description": "Compute Q-Ball metrics.",
-                    "help_text": "Compute Q-Ball metrics (gfa, nufo, odf, ...)."
+                    "help_text": "Compute Q-Ball metrics (gfa, nufo, odf, ...).",
+                    "default": false
                 },
                 "use_qball_for_tracking": {
                     "type": "boolean",
                     "description": "Use Q-Ball model for tractography instead of fODFs.",
-                    "help_text": "Use Q-Ball model for tractography instead of fODFs."
+                    "help_text": "Use Q-Ball model for tractography instead of fODFs.",
+                    "default": false
                 }
             }
         },
@@ -310,12 +322,8 @@
                 "run_t1_synthstrip": {
                     "type": "boolean",
                     "description": "Run T1 brain extraction using Synthstrip.",
-                    "help_text": "Run T1 brain extraction using Synthstrip."
-                },
-                "keep_dwi_with_skull": {
-                    "type": "boolean",
-                    "description": "Keep DWI in native space with skull for the registration to T1.",
-                    "help_text": "Keep DWI in native space with skull for the registration to T1."
+                    "help_text": "Run T1 brain extraction using Synthstrip.",
+                    "default": false
                 },
                 "template_t1": {
                     "type": "string",
@@ -488,7 +496,8 @@
                 "sh_fitting": {
                     "type": "boolean",
                     "description": "Compute a Spherical Harmonics fit on the DWI, and output the SH coefficients in a Nifti file.",
-                    "help_text": "Compute a Spherical Harmonics fit on the DWI, and output the SH coefficients in a Nifti file."
+                    "help_text": "Compute a Spherical Harmonics fit on the DWI, and output the SH coefficients in a Nifti file.",
+                    "default": false
                 },
                 "sh_fitting_basis": {
                     "type": "string",
@@ -767,7 +776,8 @@
                 "local_tracking_gpu": {
                     "type": "boolean",
                     "description": "Use GPU tracking",
-                    "hidden": true
+                    "hidden": true,
+                    "default": false
                 }
             }
         },
@@ -830,7 +840,8 @@
                     "type": "boolean",
                     "description": "Display version and exit.",
                     "fa_icon": "fas fa-question-circle",
-                    "hidden": true
+                    "hidden": true,
+                    "default": false
                 },
                 "publish_dir_mode": {
                     "type": "string",
@@ -853,7 +864,8 @@
                     "type": "boolean",
                     "description": "Send plain-text email instead of HTML.",
                     "fa_icon": "fas fa-remove-format",
-                    "hidden": true
+                    "hidden": true,
+                    "default": false
                 },
                 "max_multiqc_email_size": {
                     "type": "string",
@@ -867,7 +879,8 @@
                     "type": "boolean",
                     "description": "Do not use coloured log outputs.",
                     "fa_icon": "fas fa-palette",
-                    "hidden": true
+                    "hidden": true,
+                    "default": false
                 },
                 "multiqc_config": {
                     "type": "string",
@@ -918,7 +931,8 @@
             "help_text": "Define the bundle_seg subworkflow configuration parameters.",
             "properties": {
                 "run_bundle_seg": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false
                 },
                 "atlas_directory": {
                     "type": "string",
@@ -937,12 +951,14 @@
                 "run_easyreg": {
                     "type": "boolean",
                     "description": "Run freesurfer EasyReg any-to-any modality registration.",
-                    "help_text": "Needs freesurfer license."
+                    "help_text": "Needs freesurfer license.",
+                    "default": false
                 },
                 "run_synthmorph": {
                     "type": "boolean",
                     "description": "Use SynthMorph for registration instead of ANTs for BundleSeg. (Requires Freesurfer license)",
-                    "help_text": "Use SynthMorph for registration instead of ANTs for BundleSeg. (Requires Freesurfer license)"
+                    "help_text": "Use SynthMorph for registration instead of ANTs for BundleSeg. (Requires Freesurfer license)",
+                    "default": false
                 }
             }
         },
@@ -954,7 +970,8 @@
             "help_text": "Define the tractometry subworkflow configuration parameters.",
             "properties": {
                 "run_tractometry": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false
                 },
                 "nb_points": {
                     "type": "integer",
@@ -980,12 +997,14 @@
                 "run_noddi": {
                     "type": "boolean",
                     "description": "Compute NODDI maps.",
-                    "help_text": "Compute NODDI maps."
+                    "help_text": "Compute NODDI maps.",
+                    "default": false
                 },
                 "run_freewater": {
                     "type": "boolean",
                     "description": "Run Freewater Elimination and compute Freewater corrected metrics.",
-                    "help_text": "Run Freewater Elimination and compute Freewater corrected metrics."
+                    "help_text": "Run Freewater Elimination and compute Freewater corrected metrics.",
+                    "default": false
                 },
                 "average_diff_priors": {
                     "type": "boolean",
@@ -1048,7 +1067,8 @@
                 "run_atlas_roimetrics": {
                     "type": "boolean",
                     "description": "Run atlas-based ROI metrics. The atlas used must be specified using one of the 'use_atlas_*' parameters.",
-                    "help_text": "Run atlas-based ROI metrics. The atlas used must be specified using one of the 'use_atlas_*' parameters."
+                    "help_text": "Run atlas-based ROI metrics. The atlas used must be specified using one of the 'use_atlas_*' parameters.",
+                    "default": false
                 }
             }
         },
@@ -1078,7 +1098,8 @@
                 "use_binary_masks": {
                     "type": "boolean",
                     "description": "If 'true', the IIT bundle masks will be thresholded to create binary masks before extracting the metrics.",
-                    "help_text": "IIT bundle masks will be thresholded to create binary masks before extracting the metrics."
+                    "help_text": "IIT bundle masks will be thresholded to create binary masks before extracting the metrics.",
+                    "default": false
                 }
             }
         },
@@ -1107,13 +1128,15 @@
                     "type": "boolean",
                     "description": "If set, the results will be outputted in the T1 orig space.",
                     "fa_icon": "fas fa-map",
-                    "help_text": "Images, masks, labels will be outputted in the T1 orig space."
+                    "help_text": "Images, masks, labels will be outputted in the T1 orig space.",
+                    "default": false
                 },
                 "output_template_space": {
                     "type": "boolean",
                     "description": "If set, the results will be outputted in the specified template space using TemplateFlow.",
                     "fa_icon": "fas fa-map",
-                    "help_text": "Please see their documentation for an exhaustive list (https://www.templateflow.org/browse/)"
+                    "help_text": "Please see their documentation for an exhaustive list (https://www.templateflow.org/browse/)",
+                    "default": false
                 },
                 "template": {
                     "type": "string",
