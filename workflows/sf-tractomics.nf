@@ -491,6 +491,7 @@ def collectStatsFiles(ch_stats_files, name, storeDir) {
 
             // Create file writer for new file
             def output_file = file(output_file_path)
+            output_file.getParent().mkdirs()
             def file_writer = output_file.newWriter()
 
             // Read all stats files to write rows with all columns, filling missing values with no value
