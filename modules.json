@@ -67,7 +67,7 @@
                     },
                     "bundle/recognize": {
                         "branch": "main",
-                        "git_sha": "ffb3edf0fdca5a8c1262224da72d088043de7949",
+                        "git_sha": "c67c63eff91d7bddc8060071b755a29784c619cd",
                         "installed_by": ["bundle_seg"]
                     },
                     "bundle/stats": {
@@ -172,7 +172,7 @@
                     },
                     "qc/tractogram": {
                         "branch": "main",
-                        "git_sha": "2fadf66d00b295aac6a827fbbcf7bad579d52881",
+                        "git_sha": "c67c63eff91d7bddc8060071b755a29784c619cd",
                         "installed_by": ["modules"]
                     },
                     "reconst/diffusivitypriors": {
@@ -336,7 +336,7 @@
                     },
                     "bundle_seg": {
                         "branch": "main",
-                        "git_sha": "ffb3edf0fdca5a8c1262224da72d088043de7949",
+                        "git_sha": "c67c63eff91d7bddc8060071b755a29784c619cd",
                         "installed_by": ["subworkflows"]
                     },
                     "harmonization": {
