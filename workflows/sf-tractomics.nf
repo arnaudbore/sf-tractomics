@@ -52,6 +52,10 @@ workflow SF_TRACTOMICS {
     ch_bet_probability = channel.empty()
     ch_synthstrip_weights = channel.empty()
 
+    if (workflow.profile.contains('reproducible') && workflow.profile.contains('gpu')) {
+        error "\033[0;31mERROR: Profiles 'reproducible' and 'gpu' are not compatible and cannot be used together. Please remove gpu if you want reproducible results.\033[0m"
+    }
+
     /* Load topup config if provided */
     if ( params.config_topup ) {
         if ( file(params.config_topup).exists()) {
