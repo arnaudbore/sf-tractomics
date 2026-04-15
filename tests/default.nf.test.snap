@@ -160,6 +160,7 @@
                 "sub-test-1/dwi/sub-test-1_model-csd_param-peaks_dwimap.nii.gz",
                 "sub-test-1/dwi/sub-test-1_model-csd_param-sh_dwimap.nii.gz",
                 "sub-test-1/dwi/sub-test-1_model-csd_param-wmsh_dwimap.nii.gz",
+                "sub-test-1/dwi/sub-test-1_model-fw_param-fwf_dwimap.nii.gz",
                 "sub-test-1/dwi/sub-test-1_model-qball_param-gfa_dwimap.nii.gz",
                 "sub-test-1/dwi/sub-test-1_model-qball_param-nufo_dwimap.nii.gz",
                 "sub-test-1/dwi/sub-test-1_model-qball_param-peaks_dwimap.nii.gz",
@@ -217,6 +218,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-03-26T16:15:03.763505689"
+        "timestamp": "2026-04-15T10:56:06.701171989"
     }
 }
