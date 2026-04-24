@@ -506,7 +506,11 @@ def parseBidsConfig(config_path) {
         def session_id = session_raw ? (session_raw.startsWith("ses-") ? session_raw : "ses-${session_raw}") : ""
         def run_id = run_raw ? (run_raw.startsWith("run-") ? run_raw : "run-${run_raw}") : ""
 
-        def meta = [id: subject_id, session: session_id, run: run_id]
+        // Keep all sample-level metadata from bids_config and normalize core BIDS identifiers.
+        def meta = sample.collectEntries { key, value -> [key.toString(), value] }
+        meta.id = subject_id
+        meta.session = session_id
+        meta.run = run_id
 
         return [
             meta,
