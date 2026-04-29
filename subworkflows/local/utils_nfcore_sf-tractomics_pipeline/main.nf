@@ -16,7 +16,6 @@ include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipeline'
 include { IO_BIDS                   } from '../../nf-neuro/io_bids/main'
-include { IO_SAFECASTINPUTS         } from '../../../modules/local/io/safecastinputs'
 include { imNotification            } from '../../nf-core/utils_nfcore_pipeline'
 
 /*
@@ -33,8 +32,8 @@ workflow PIPELINE_INITIALISATION {
     _monochrome_logs  // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir            //  string: The output directory where the results will be saved
-    _input            //  string: Path to input samplesheet
-    _bids_config      //  string: Path to BIDS JSON configuration file
+    input            //  string: Path to input samplesheet
+    bids_config      //  string: Path to BIDS JSON configuration file
     help              // boolean: Display help message and exit
     help_full         // boolean: Show the full help message
     show_hidden       // boolean: Show hidden parameters in the help message
@@ -112,9 +111,9 @@ workflow PIPELINE_INITIALISATION {
     //
     // Create channel from input file provided through params.bids_config or params.input
     //
-    if (_bids_config) {
-        ch_input_sheets = channel
-            .fromList(parseBidsConfig(_bids_config))
+    if (bids_config) {
+        ch_samplesheet = channel
+            .fromList(parseBidsConfig(bids_config))
             .map {
                 meta, dwi, bval, bvec, sbref, rev_dwi, rev_bval, rev_bvec, rev_sbref, t1, wmparc, aparc_aseg, lesion ->
                     return [
@@ -135,11 +134,7 @@ workflow PIPELINE_INITIALISATION {
             }
             .map { samplesheet ->
                 validateInputSamplesheet(samplesheet)
-            }
-
-        IO_SAFECASTINPUTS(ch_input_sheets)
-        ch_samplesheet = IO_SAFECASTINPUTS.out.safe_inputs
-            .multiMap { meta, dwi, bval, bvec, sbref, rev_dwi, rev_bval, rev_bvec, rev_sbref, t1, wmparc, aparc_aseg, lesion ->
+            }.multiMap { meta, dwi, bval, bvec, sbref, rev_dwi, rev_bval, rev_bvec, rev_sbref, t1, wmparc, aparc_aseg, lesion ->
                 t1: [meta, t1]
                 wmparc: [meta, wmparc]
                 aparc_aseg: [meta, aparc_aseg]
@@ -158,15 +153,15 @@ workflow PIPELINE_INITIALISATION {
             log.warn("No participants.tsv provided, covariates will not be used.")
         }
     }
-    else if (_input) {
+    else if (input) {
         //
         // params.input is either a BIDS compliant directory or a samplesheet
         //   - if directory, we assume it is BIDS
         //   - everything else is a samplesheet
         //
-        if (file(_input).isDirectory()) {
+        if (file(input).isDirectory()) {
             IO_BIDS(
-                channel.fromPath(_input),
+                channel.fromPath(input),
                 channel.value(params.fsbids ?: []),
                 channel.value(params.bidsignore ?: [])
             )
@@ -184,8 +179,8 @@ workflow PIPELINE_INITIALISATION {
             if (params.participants_tsv) {
                 participants_tsv_path = "${params.participants_tsv}"
             }
-            else if (file("${_input}/participants.tsv").exists()) {
-                participants_tsv_path = "${_input}/participants.tsv"
+            else if (file("${input}/participants.tsv").exists()) {
+                participants_tsv_path = "${input}/participants.tsv"
             }
             else {
                 participants_tsv_path = null
@@ -193,8 +188,8 @@ workflow PIPELINE_INITIALISATION {
             }
         }
         else {
-            ch_input_sheets = channel
-                .fromList(samplesheetToList(_input, "${projectDir}/assets/schema_input.json"))
+            ch_samplesheet = channel
+                .fromList(samplesheetToList(input, "${projectDir}/assets/schema_input.json"))
                 .map{
                     meta, dwi, bval, bvec, sbref, rev_dwi, rev_bval, rev_bvec, rev_sbref, t1, wmparc, aparc_aseg, lesion ->
                         return [
@@ -215,11 +210,7 @@ workflow PIPELINE_INITIALISATION {
                 }
                 .map{ samplesheet ->
                     validateInputSamplesheet(samplesheet)
-                }
-
-            IO_SAFECASTINPUTS(ch_input_sheets)
-            ch_samplesheet = IO_SAFECASTINPUTS.out.safe_inputs
-                .multiMap{ meta, dwi, bval, bvec, sbref, rev_dwi, rev_bval, rev_bvec, rev_sbref, t1, wmparc, aparc_aseg, lesion ->
+                }.multiMap{ meta, dwi, bval, bvec, sbref, rev_dwi, rev_bval, rev_bvec, rev_sbref, t1, wmparc, aparc_aseg, lesion ->
                     t1: [meta, t1]
                     wmparc: [meta, wmparc]
                     aparc_aseg: [meta, aparc_aseg]
