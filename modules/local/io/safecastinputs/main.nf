@@ -3,9 +3,9 @@ process IO_SAFECASTINPUTS {
     label 'process_single'
 
     input:
-        tuple val(meta), path(dwi, stageAs: "dwi"), path(bval, stageAs: "bval"), path(bvec, stageAs: "bvec"), path(sbref, stageAs: "sbref"), path(rev_dwi, stageAs: "rev"), path(rev_bval, stageAs: "rval"), path(rev_bvec, stageAs: "rvec"), path(rev_sbref, stageAs: "rbref"), path(t1, stageAs: "t1"), path(wmparc, stageAs: "wmparc"), path(aparc_aseg, stageAs: "aparc+aseg"), path(lesion, stageAs: "lesion")
+        tuple val(meta), path(dwi), path(bval), path(bvec), path(sbref), path(rev_dwi), path(rev_bval), path(rev_bvec), path(rev_sbref), path(t1), path(wmparc), path(aparc_aseg), path(lesion)
     output:
-        tuple val(meta), path("$out_dwi"), path("$out_bval"), path("$out_bvec"), path("$out_sbref"), path("$out_rev_dwi"), path("$out_rev_bval"), path("$out_rev_bvec"), path("$out_rev_sbref"), path("$out_t1"), path("$out_wmparc"), path("$out_aparc_aseg"), path("$out_lesion"), emit: safe_inputs
+        tuple val(meta), path("$out_dwi"), path("$out_bval"), path("$out_bvec"), path("$out_sbref", optional: true), path("$out_rev_dwi", optional: true), path("$out_rev_bval", optional: true), path("$out_rev_bvec", optional: true), path("$out_rev_sbref", optional: true), path("$out_t1"), path("$out_wmparc", optional: true), path("$out_aparc_aseg", optional: true), path("$out_lesion", optional: true), emit: safe_inputs
     script:
         out_dwi = dwi ? "dwi.nii.gz" : "$dwi"
         out_bval = bval ? "dwi.bval" : "$bval"
@@ -15,7 +15,7 @@ process IO_SAFECASTINPUTS {
         out_rev_bval = rev_bval ? "rev_dwi.bval" : "$rev_bval"
         out_rev_bvec = rev_bvec ? "rev_dwi.bvec" : "$rev_bvec"
         out_rev_sbref = rev_sbref ? "rev_sbref.nii.gz" : "$rev_sbref"
-        out_t1 = t1 ? (t1.toString().endsWith('.mgz') ? "t1.mgz" : "t1.nii.gz") : "$t1"
+        out_t1 = t1 ? (t1.toString().endsWith('.mgz') ? "t1_ready.mgz" : "t1_ready.nii.gz") : "$t1"
         out_wmparc = wmparc ? (wmparc.toString().endsWith('.mgz') ? "wmparc.mgz" : "wmparc.nii.gz") : "$wmparc"
         out_aparc_aseg = aparc_aseg ? (aparc_aseg.toString().endsWith('.mgz') ? "aparc+aseg.mgz" : "aparc+aseg.nii.gz") : "$aparc_aseg"
         out_lesion = lesion ? "lesion.nii.gz" : "$lesion"
@@ -28,9 +28,9 @@ process IO_SAFECASTINPUTS {
     [ -f "$rev_bval" ] && ln -sf $rev_bval rev_dwi.bval
     [ -f "$rev_bvec" ] && ln -sf $rev_bvec rev_dwi.bvec
     [ -f "$rev_sbref" ] && ln -sf $rev_sbref rev_sbref.nii.gz
-    [ -f "$t1" ] && ( [[ "$t1" == *.mgz ]] && ln -sf $t1 t1.mgz || ln -sf $t1 t1.nii.gz )
-    [ -f "$wmparc" ] && ( [[ "$wmparc" == *.mgz ]] && ln -sf $wmparc wmparc.mgz || ln -sf $wmparc wmparc.nii.gz )
-    [ -f "$aparc_aseg" ] && ( [[ "$aparc_aseg" == *.mgz ]] && ln -sf $aparc_aseg aparc+aseg.mgz || ln -sf $aparc_aseg aparc+aseg.nii.gz )
+    [ -f "$t1" ] && ( [[ "$t1" == *.mgz ]] && ln -sf $t1 t1_ready.mgz || ln -sf $t1 t1_ready.nii.gz )
+    [ -f "$wmparc" ] && ( [[ "$wmparc" == *.mgz ]] && ln -sf $wmparc wmparc_ready.mgz || ln -sf $wmparc wmparc_ready.nii.gz )
+    [ -f "$aparc_aseg" ] && ( [[ "$aparc_aseg" == *.mgz ]] && ln -sf $aparc_aseg aparc+aseg_ready.mgz || ln -sf $aparc_aseg aparc+aseg_ready.nii.gz )
     [ -f "$lesion" ] && ln -sf $lesion lesion.nii.gz
     exit 0
     """

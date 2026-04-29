@@ -504,13 +504,22 @@ def parseBidsConfig(config_path) {
 
         def subject_id = subject_raw.startsWith("sub-") ? subject_raw : "sub-${subject_raw}"
         def session_id = session_raw ? (session_raw.startsWith("ses-") ? session_raw : "ses-${session_raw}") : ""
-        def run_id = run_raw ? (run_raw.startsWith("run-") ? run_raw : "run-${run_raw}") : ""
 
-        // Keep all sample-level metadata from bids_config and normalize core BIDS identifiers.
-        def meta = sample.collectEntries { key, value -> [key.toString(), value] }
-        meta.id = subject_id
-        meta.session = session_id
-        meta.run = run_id
+        // Match IO_BIDS behavior: run "0" in TractoFlow configs is treated as unset.
+        def run_id = ""
+        if (run_raw && run_raw != "0" && run_raw != "run-0") {
+            run_id = run_raw.startsWith("run-") ? run_raw : "run-${run_raw}"
+        }
+
+        // Keep a minimal, normalized metadata shape consistent with IO_BIDS.
+        def meta = [
+            id          : subject_id,
+            session     : session_id,
+            run         : run_id,
+            dwi_tr      : sample.TotalReadoutTime,
+            dwi_phase   : sample.DWIPhaseEncodingDir,
+            dwi_revphase: sample.rev_DWIPhaseEncodingDir
+        ]
 
         return [
             meta,
