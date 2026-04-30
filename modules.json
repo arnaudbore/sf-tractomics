@@ -113,12 +113,12 @@
                     "image/convert": {
                         "branch": "main",
                         "git_sha": "3c1ec6c2d99653ec81d718fbabdd9c17b205b110",
-                        "installed_by": ["a", "c", "f", "l", "o", "preproc_dwi", "r", "t", "w"]
+                        "installed_by": ["preproc_dwi", "tractoflow"]
                     },
                     "image/convertdwi": {
                         "branch": "main",
                         "git_sha": "3c1ec6c2d99653ec81d718fbabdd9c17b205b110",
-                        "installed_by": ["a", "c", "f", "l", "o", "r", "t", "w"]
+                        "installed_by": ["tractoflow"]
                     },
                     "image/cropvolume": {
                         "branch": "main",
@@ -128,7 +128,7 @@
                     "image/math": {
                         "branch": "main",
                         "git_sha": "f2d66a70673d3002965ab9fbd648db7b5b9d4a34",
-                        "installed_by": ["a", "atlas_iit", "c", "f", "l", "o", "r", "t", "w"]
+                        "installed_by": ["atlas_iit", "tractoflow"]
                     },
                     "image/powderaverage": {
                         "branch": "main",
