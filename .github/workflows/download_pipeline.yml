@@ -18,6 +18,7 @@ on:
 
 env:
   NXF_ANSI_LOG: false
+  NXF_VERSION: "25.04.6"
 
 jobs:
   configure:
@@ -53,7 +54,7 @@ jobs:
       - name: Install Nextflow
         uses: nf-core/setup-nextflow@v2
         with:
-          version: v25.10
+          version: "${{ NXF_VER }}"
 
       - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5
         with:
