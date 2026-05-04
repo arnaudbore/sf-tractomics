@@ -172,7 +172,7 @@
                     },
                     "qc/multiqc": {
                         "branch": "main",
-                        "git_sha": "f2d66a70673d3002965ab9fbd648db7b5b9d4a34",
+                        "git_sha": "05b9d29a8182815a89d67c8f4ee4f3235345ae6d",
                         "installed_by": ["modules"]
                     },
                     "qc/tractogram": {
@@ -232,17 +232,17 @@
                     },
                     "registration/anattodwi": {
                         "branch": "main",
-                        "git_sha": "31193a9ea0839d2ce29898504812ffdb515b67dc",
+                        "git_sha": "fb6b03bffd4d99b5bdd9cdef47827058696a90c3",
                         "installed_by": ["registration"]
                     },
                     "registration/ants": {
                         "branch": "main",
-                        "git_sha": "31193a9ea0839d2ce29898504812ffdb515b67dc",
+                        "git_sha": "50ee17e401a5839ccbfaaa6f83c50cf57d43af96",
                         "installed_by": ["atlas_roimetrics", "registration"]
                     },
                     "registration/antsapplytransforms": {
                         "branch": "main",
-                        "git_sha": "a21f4c6280d9c3cd255a544e5ea021cc324cdfb9",
+                        "git_sha": "fb6b03bffd4d99b5bdd9cdef47827058696a90c3",
                         "installed_by": ["atlas_roimetrics", "output_template_space", "tractoflow"]
                     },
                     "registration/convert": {
