@@ -2,7 +2,7 @@
 
 [![Open in GitHub Codespaces](https://img.shields.io/badge/Open_In_GitHub_Codespaces-black?labelColor=grey&logo=github)](https://github.com/codespaces/new/scilus/sf-tractomics)
 [![GitHub Actions CI Status](https://github.com/scilus/sf-tractomics/actions/workflows/nf-test.yml/badge.svg)](https://github.com/scilus/sf-tractomics/actions/workflows/nf-test.yml)
-[![GitHub Actions Linting Status](https://github.com/scilus/sf-tractomics/actions/workflows/linting.yml/badge.svg)](https://github.com/scilus/sf-tractomics/actions/workflows/linting.yml)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![GitHub Actions Linting Status](https://github.com/scilus/sf-tractomics/actions/workflows/linting.yml/badge.svg)](https://github.com/scilus/sf-tractomics/actions/workflows/linting.yml)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 [![Deploy documentation](https://github.com/scilus/sf-tractomics/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/scilus/sf-tractomics/actions/workflows/deploy.yml)
 
