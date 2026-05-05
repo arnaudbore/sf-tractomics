@@ -199,6 +199,13 @@
                     "help_text": "Run Gibbs correction.",
                     "default": true
                 },
+                "eddy_nan_threshold": {
+                    "type": "number",
+                    "default": 0,
+                    "description": "Eddy nan threshold. If the number of voxels with NaN values after Eddy correction is above this threshold, the Eddy correction will be considered as failed and the uncorrected DWI will be used for the next steps.",
+                    "help_text": "Eddy nan threshold. If the number of voxels with NaN values after Eddy correction is above this threshold, the Eddy correction will be considered as failed and the uncorrected DWI will be used for the next steps.",
+                    "minimum": 0
+                },
                 "run_topup": {
                     "type": "boolean",
                     "default": true,
