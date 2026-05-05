@@ -7,7 +7,7 @@
                 "nf-core": {
                     "multiqc": {
                         "branch": "master",
-                        "git_sha": "79b36b51048048374b642289bfe9e591ef56fe05",
+                        "git_sha": "008f9d3e61209bf995edac3ba531f54e269e1215",
                         "installed_by": ["modules"]
                     }
                 }
@@ -21,7 +21,7 @@
                     },
                     "utils_nfcore_pipeline": {
                         "branch": "master",
-                        "git_sha": "65f5e638d901a51534c68fd5c1c19e8112fb4df1",
+                        "git_sha": "a3fb7351b1fdb2b1de282b765816bbea190e86a8",
                         "installed_by": ["subworkflows"]
                     },
                     "utils_nfschema_plugin": {
@@ -42,7 +42,7 @@
                     },
                     "betcrop/fslbetcrop": {
                         "branch": "main",
-                        "git_sha": "cada787da3b1857454bcfbb49038d438b375b990",
+                        "git_sha": "1361e0fffe617454b95b909d7c6f126040f6ca42",
                         "installed_by": ["output_template_space", "preproc_dwi", "topup_eddy"]
                     },
                     "betcrop/synthstrip": {
@@ -112,8 +112,13 @@
                     },
                     "image/convert": {
                         "branch": "main",
-                        "git_sha": "e4dc6b2d5832eab9a6d0f6e4fab4841e7bb7bb64",
-                        "installed_by": ["preproc_dwi"]
+                        "git_sha": "3c1ec6c2d99653ec81d718fbabdd9c17b205b110",
+                        "installed_by": ["preproc_dwi", "tractoflow"]
+                    },
+                    "image/convertdwi": {
+                        "branch": "main",
+                        "git_sha": "3c1ec6c2d99653ec81d718fbabdd9c17b205b110",
+                        "installed_by": ["tractoflow"]
                     },
                     "image/cropvolume": {
                         "branch": "main",
@@ -123,7 +128,7 @@
                     "image/math": {
                         "branch": "main",
                         "git_sha": "f2d66a70673d3002965ab9fbd648db7b5b9d4a34",
-                        "installed_by": ["atlas_iit"]
+                        "installed_by": ["atlas_iit", "tractoflow"]
                     },
                     "image/powderaverage": {
                         "branch": "main",
@@ -167,7 +172,7 @@
                     },
                     "qc/multiqc": {
                         "branch": "main",
-                        "git_sha": "f2d66a70673d3002965ab9fbd648db7b5b9d4a34",
+                        "git_sha": "05b9d29a8182815a89d67c8f4ee4f3235345ae6d",
                         "installed_by": ["modules"]
                     },
                     "qc/tractogram": {
@@ -227,17 +232,17 @@
                     },
                     "registration/anattodwi": {
                         "branch": "main",
-                        "git_sha": "31193a9ea0839d2ce29898504812ffdb515b67dc",
+                        "git_sha": "fb6b03bffd4d99b5bdd9cdef47827058696a90c3",
                         "installed_by": ["registration"]
                     },
                     "registration/ants": {
                         "branch": "main",
-                        "git_sha": "31193a9ea0839d2ce29898504812ffdb515b67dc",
+                        "git_sha": "50ee17e401a5839ccbfaaa6f83c50cf57d43af96",
                         "installed_by": ["atlas_roimetrics", "registration"]
                     },
                     "registration/antsapplytransforms": {
                         "branch": "main",
-                        "git_sha": "a21f4c6280d9c3cd255a544e5ea021cc324cdfb9",
+                        "git_sha": "fb6b03bffd4d99b5bdd9cdef47827058696a90c3",
                         "installed_by": ["atlas_roimetrics", "output_template_space", "tractoflow"]
                     },
                     "registration/convert": {
@@ -361,7 +366,7 @@
                     },
                     "preproc_dwi": {
                         "branch": "main",
-                        "git_sha": "b28fa6c023fe5f6d713d20cf9d07c614637cb376",
+                        "git_sha": "e08971ac9ff68fd7df4c52fa6a1bce1db8162a03",
                         "installed_by": ["tractoflow"]
                     },
                     "preproc_t1": {
@@ -386,7 +391,7 @@
                     },
                     "tractoflow": {
                         "branch": "main",
-                        "git_sha": "846afcabc950e2e01b86ae4c91b025ef71947f05",
+                        "git_sha": "bd3302172e63f11c08db8ebb22f8653dfff21af7",
                         "installed_by": ["subworkflows"]
                     },
                     "tractometry": {
