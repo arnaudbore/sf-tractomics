@@ -18,7 +18,7 @@ on:
 
 env:
   NXF_ANSI_LOG: false
-  NXF_VERSION: "25.04.6"
+  NXF_VER: "25.04.6"
 
 jobs:
   configure:
