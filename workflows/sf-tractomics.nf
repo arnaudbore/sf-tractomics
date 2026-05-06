@@ -104,6 +104,7 @@ workflow SF_TRACTOMICS {
         [
             "preproc_dwi_run_denoising": params.run_dwi_denoising,
             "preproc_dwi_run_degibbs": params.run_gibbs_correction,
+            "eddy_nan_threshold": params.eddy_nan_threshold,
             "topup_eddy_run_topup": params.run_topup,
             "topup_eddy_run_eddy": params.run_eddy,
             "preproc_dwi_run_synthstrip": params.run_dwi_synthstrip,
