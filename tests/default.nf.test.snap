@@ -107,7 +107,7 @@
                     "scilpy": "2.2.2"
                 },
                 "Workflow": {
-                    "scilus/sf-tractomics": "v0.1.0"
+                    "scilus/sf-tractomics": "v0.1.1"
                 }
             },
             [
@@ -223,6 +223,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-05-13T09:07:57.498743668"
+        "timestamp": "2026-05-13T11:29:15.894626753"
     }
 }
