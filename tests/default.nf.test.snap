@@ -107,7 +107,7 @@
                     "scilpy": "2.2.2"
                 },
                 "Workflow": {
-                    "scilus/sf-tractomics": "v0.1.0"
+                    "scilus/sf-tractomics": "v0.1.1"
                 }
             },
             [
@@ -129,6 +129,7 @@
                 "sub-test-1/anat/sub-test-1_label-GM_desc-fastseg_probseg.nii.gz",
                 "sub-test-1/anat/sub-test-1_label-WM_desc-fastseg_mask.nii.gz",
                 "sub-test-1/anat/sub-test-1_label-WM_desc-fastseg_probseg.nii.gz",
+                "sub-test-1/anat/sub-test-1_space-MNI152Lin_desc-preproc_T1w.nii.gz",
                 "sub-test-1/anat/sub-test-1_space-T1w_desc-brain_mask.nii.gz",
                 "sub-test-1/anat/sub-test-1_space-T1w_desc-preproc_T1w.nii.gz",
                 "sub-test-1/anat/sub-test-1_space-dwi_desc-preproc_T1w.nii.gz",
@@ -208,8 +209,12 @@
                 "sub-test-1/multiqc/sub-test-1_multiqc_plots",
                 "sub-test-1/multiqc/sub-test-1_multiqc_report.html",
                 "sub-test-1/xfm",
+                "sub-test-1/xfm/sub-test-1_from-MNI152Lin_to-dwi_mode-image_desc-affine_xfm.mat",
+                "sub-test-1/xfm/sub-test-1_from-MNI152Lin_to-dwi_mode-image_desc-warp_xfm.nii.gz",
                 "sub-test-1/xfm/sub-test-1_from-T1w_to-dwi_mode-image_desc-affine_xfm.mat",
                 "sub-test-1/xfm/sub-test-1_from-T1w_to-dwi_mode-image_desc-warp_xfm.nii.gz",
+                "sub-test-1/xfm/sub-test-1_from-dwi_to-MNI152Lin_mode-image_desc-affine_xfm.mat",
+                "sub-test-1/xfm/sub-test-1_from-dwi_to-MNI152Lin_mode-image_desc-warp_xfm.nii.gz",
                 "sub-test-1/xfm/sub-test-1_from-dwi_to-T1w_mode-image_desc-affine_xfm.mat",
                 "sub-test-1/xfm/sub-test-1_from-dwi_to-T1w_mode-image_desc-warp_xfm.nii.gz"
             ]
@@ -218,6 +223,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-04-15T10:56:06.701171989"
+        "timestamp": "2026-05-13T11:29:15.894626753"
     }
 }
