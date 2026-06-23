@@ -142,7 +142,7 @@
                     },
                     "io/readbids": {
                         "branch": "main",
-                        "git_sha": "ad1deb6ee4381f2a65fbe6fa27c201678d09f33d",
+                        "git_sha": "94d1d8546f43881f57c5a209ed857e327dde507a",
                         "installed_by": ["io_bids"]
                     },
                     "preproc/eddy": {
@@ -237,7 +237,7 @@
                     },
                     "registration/ants": {
                         "branch": "main",
-                        "git_sha": "04fa964510a10ef66cba03f647a56a62912a11d3",
+                        "git_sha": "7b06f44e3cb24a4eedc532db5be2343e430d568c",
                         "installed_by": ["atlas_roimetrics", "registration"]
                     },
                     "registration/antsapplytransforms": {
@@ -351,7 +351,7 @@
                     },
                     "io_bids": {
                         "branch": "main",
-                        "git_sha": "ab19b5606eeebe293a218c7870ccee84b87adae9",
+                        "git_sha": "94d1d8546f43881f57c5a209ed857e327dde507a",
                         "installed_by": ["subworkflows"]
                     },
                     "load_test_data": {
@@ -376,7 +376,7 @@
                     },
                     "reconst_fw_noddi": {
                         "branch": "main",
-                        "git_sha": "6e69a03390c2a4bc19b2e459d0d55c8cd0501626",
+                        "git_sha": "1a26de31b192fd9d827cde5ae0eb619cdb89fc4e",
                         "installed_by": ["subworkflows"]
                     },
                     "registration": {
