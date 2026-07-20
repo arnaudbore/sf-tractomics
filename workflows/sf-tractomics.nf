@@ -131,7 +131,7 @@ workflow SF_TRACTOMICS {
     )
     ch_versions = ch_versions.mix(TRACTOFLOW.out.versions)
     ch_sub_multiqc_files = ch_sub_multiqc_files.mix(TRACTOFLOW.out.mqc)
-    ch_global_multiqc_files = ch_global_multiqc_files.mix(TRACTOFLOW.out.global_mqc)
+    // ch_global_multiqc_files = ch_global_multiqc_files.mix(TRACTOFLOW.out.global_mqc)
 
     //
     // Ensemble tracking
@@ -448,10 +448,6 @@ workflow SF_TRACTOMICS {
     ch_global_multiqc_files = ch_global_multiqc_files.mix(ch_fd_files.flatten())
     ch_global_multiqc_files = ch_global_multiqc_files.mix(ch_multiqc_files)
 
-    ch_global_multiqc_files.view()
-    ch_multiqc_config_global.view()
-    ch_multiqc_custom_config.view()
-    ch_multiqc_logo.view()
     // Global multiqc
     MULTIQC_GLOBAL (
         channel.of([meta:[id: 'global'], qc_images: []]),
