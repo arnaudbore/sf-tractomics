@@ -48,15 +48,6 @@ workflow SF_TRACTOMICS {
             lesion: [meta, lesion]
         }
 
-    // ch_inputs.t1.view { "t1: $it" }
-    // ch_inputs.wmparc.view { "wmparc: $it" }
-    // ch_inputs.aparcaseg.view { "aparcaseg: $it" }
-    // ch_inputs.dwi_bval_bvec.view { "dwi_bval_bvec: $it" }
-    // ch_inputs.rev_dwi_bval_bvec.view { "rev_dwi_bval_bvec: $it" }
-    // ch_inputs.b0.view { "b0: $it" }
-    // ch_inputs.rev_b0.view { "rev_b0: $it" }
-    // ch_inputs.lesion.view { "lesion: $it" }
-
     ch_versions = channel.empty()
     ch_sub_multiqc_files = channel.empty()
     ch_global_multiqc_files = channel.empty()
@@ -457,6 +448,10 @@ workflow SF_TRACTOMICS {
     ch_global_multiqc_files = ch_global_multiqc_files.mix(ch_fd_files.flatten())
     ch_global_multiqc_files = ch_global_multiqc_files.mix(ch_multiqc_files)
 
+    ch_global_multiqc_files.view()
+    ch_multiqc_config_global.view()
+    ch_multiqc_custom_config.view()
+    ch_multiqc_logo.view()
     // Global multiqc
     MULTIQC_GLOBAL (
         channel.of([meta:[id: 'global'], qc_images: []]),

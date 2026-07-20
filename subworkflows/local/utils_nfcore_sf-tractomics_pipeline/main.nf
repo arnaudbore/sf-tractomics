@@ -40,7 +40,6 @@ workflow PIPELINE_INITIALISATION {
     main:
 
     ch_versions = channel.empty()
-    ch_samplesheet = channel.empty()
 
     //
     // Print version and exit if required and dump pipeline parameters to JSON file
@@ -109,9 +108,10 @@ workflow PIPELINE_INITIALISATION {
     )
 
     //
-    // Create channel from input file provided through params.bids_config or params.input
+    // Create channel from input file provided through params.input
     //
     if (input) {
+        log.info "Input ${input}"
         //
         // params.input is either a BIDS compliant directory or a samplesheet
         //   - if directory, we assume it is BIDS
@@ -204,7 +204,7 @@ workflow PIPELINE_INITIALISATION {
                 }
 
                 // Get Freesurfer parcellations if exists
-                def (aparc_aseg, wmparc, fs_log) = getFreeSurferParcellations(params.fs, id, ses)
+                def (aparc_aseg, wmparc, fs_log) = getFreeSurferParcellations(fs, id, ses)
                 logs << fs_log
 
                 // ** Starting with AP/PA, look if there are multiple runs ** //
@@ -454,7 +454,7 @@ workflow PIPELINE_INITIALISATION {
                 }
                 else {
                     // No DWI
-                    error "ERROR: No DWI found for this BIDS dataset: $bids. Please validate your BIDS dataset."
+                    error "ERROR: No DWI found for this BIDS dataset: $input. Please validate your BIDS dataset."
                 }
 
                 // ** Save the logs into ${params.outdir}/pipeline_info/BIDS_logs.txt ** //
@@ -490,38 +490,22 @@ workflow PIPELINE_INITIALISATION {
         }
         else {
             // samplesheet
-            log.info "Input is a samplesheet. Using nf-schema plugin to parse the samplesheet."
-            ch_samplesheet = channel
+            log.info "Input ${input} is a samplesheet. Using nf-schema plugin to parse the samplesheet."
+            ch_inputs = channel
                 .fromList(samplesheetToList(input, "${projectDir}/assets/schema_input.json"))
                 .map{
                     meta, dwi, bval, bvec, sbref, rev_dwi, rev_bval, rev_bvec, rev_sbref, t1, wmparc, aparc_aseg, lesion ->
                         return [
                             meta,
-                            dwi,
-                            bval,
-                            bvec,
-                            sbref ?: [],
-                            rev_dwi ?: [],
-                            rev_bval ?: [],
-                            rev_bvec ?: [],
-                            rev_sbref ?: [],
                             t1,
                             wmparc ?: [],
                             aparc_aseg ?: [],
+                            [dwi, bval, bvec],
+                            rev_dwi ? [rev_dwi, rev_bval, rev_bvec] : [],
+                            sbref ?: [],
+                            rev_sbref ?: [],
                             lesion ?: []
                         ]
-                }
-                .map{ samplesheet ->
-                    validateInputSamplesheet(samplesheet)
-                }.multiMap{ meta, dwi, bval, bvec, sbref, rev_dwi, rev_bval, rev_bvec, rev_sbref, t1, wmparc, aparc_aseg, lesion ->
-                    t1: [meta, t1]
-                    wmparc: [meta, wmparc]
-                    aparc_aseg: [meta, aparc_aseg]
-                    dwi_bval_bvec: [meta, dwi, bval, bvec]
-                    b0: [meta, sbref]
-                    rev_dwi_bval_bvec: [meta, rev_dwi, rev_bval, rev_bvec]
-                    rev_b0: [meta, rev_sbref]
-                    lesion: [meta, lesion]
                 }
         }
     }
@@ -667,7 +651,7 @@ def matchFilesToDWI(Map dwiJson, dwiFilename, Map assocJson) {
     def result = [matched: false, warnings: []]
 
     def dwiName = (dwiFilename instanceof Path ? dwiFilename.name :
-                  dwiFilename.toString().split('/')[-1])
+                    dwiFilename.toString().split('/')[-1])
 
     // Trying to find a match between B0FieldSource and B0FieldIdentifier
     def dwiFieldSource = dwiJson?.B0FieldSource
