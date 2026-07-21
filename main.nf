@@ -69,7 +69,7 @@ workflow {
     // WORKFLOW: Run main workflow
     //
     SCILUS_SF_TRACTOMICS (
-        PIPELINE_INITIALISATION.out.input_bids
+        PIPELINE_INITIALISATION.out.inputs
     )
     //
     // SUBWORKFLOW: Run completion tasks

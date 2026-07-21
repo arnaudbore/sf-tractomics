@@ -32,11 +32,11 @@ include { HARMONIZATION          } from '../subworkflows/nf-neuro/harmonization/
 
 workflow SF_TRACTOMICS {
     take:
-        ch_input_bids
+        ch_inputs
 
     main:
 
-    ch_inputs = ch_input_bids
+    ch_inputs = ch_inputs
         .multiMap{ meta, t1, wmparc, aparcaseg, dwi_bval_bvec, rev_dwi_bval_bvec, b0, rev_b0, lesion ->
             t1: [meta, t1]
             wmparc: [meta, wmparc]

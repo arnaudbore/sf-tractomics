@@ -241,7 +241,6 @@ workflow PIPELINE_INITIALISATION {
                     primary_nii.eachWithIndex { nii, idx ->
                         def run_id = extractRunFromFilename(nii) ?: (primary_nii.size() > 1 ? "${idx + 1}" : "")
                         def rev_idx = findMatchingReverseFile(nii, reverse_nii)
-
                         // ** Before mixing the AP/PA, check if the PhaseEncodingDirection are opposite ** //
                         def pe_check = [matched: true, warnings: [], pe: null]
                         if (rev_idx != null) {
@@ -250,6 +249,7 @@ workflow PIPELINE_INITIALISATION {
                                 logs << "[${id}${ses ? "/" + ses : ""}${run_id ? '/run-' + run_id : ''}] ${pe_check.warnings.join(" ")}"
                             }
                         }
+
                         def readout = primary_json[idx]?.TotalReadoutTime ?: primary_json[idx]?.EstimatedTotalReadoutTime ?: params.dwi_susceptibility_readout
 
                         // ** Finding possible sbref and epi candidates for this DWI run ** //
@@ -280,6 +280,8 @@ workflow PIPELINE_INITIALISATION {
                             def match = matchFilesToDWI(
                                 primary_json[idx],
                                 nii,
+                                rev_idx ? reverse_json[rev_idx] : [:],
+                                rev_idx ? reverse_nii[rev_idx] : null,
                                 candidate.json       // JSON file
                             )
 
@@ -292,10 +294,14 @@ workflow PIPELINE_INITIALISATION {
                         }
 
                         def epi_match = []
+                        println "rev_idx: ${rev_idx}"
+                        println "idx: ${idx}"
                         epi_candidates.each { candidate ->
                             def match = matchFilesToDWI(
                                 primary_json[idx],
                                 nii,
+                                rev_idx ? reverse_json[rev_idx] : [:],
+                                rev_idx ? reverse_nii[rev_idx] : null,
                                 candidate.json       // JSON file
                             )
 
@@ -328,21 +334,9 @@ workflow PIPELINE_INITIALISATION {
                             wmparc,
                             aparc_aseg,
                             [nii, primary_bval[idx], primary_bvec[idx]],
-                            rev_idx != null ? [reverse_nii[rev_idx], reverse_bval[rev_idx], reverse_bvec[rev_idx]] : [],
-                            rev_idx != null
-                                ? (sbref_split.same
-                                    ? sbref_split.same[0].nii
-                                    : (epi_split.same
-                                        ? epi_split.same[0].nii
-                                        : []))
-                                : [],
-                            rev_idx != null
-                                ? (sbref_split.opposite
-                                    ? sbref_split.opposite[0].nii
-                                    : (epi_split.opposite
-                                        ? epi_split.opposite[0].nii
-                                        : []))
-                                : [],
+                            (rev_idx != null) ? [reverse_nii[rev_idx], reverse_bval[rev_idx], reverse_bvec[rev_idx]] : [],
+                            sbref_split?.same?.find()?.nii ?: epi_split?.same?.find()?.nii ?: [],
+                            sbref_split?.opposite?.find()?.nii ?: epi_split?.opposite?.find()?.nii ?: [],
                             []
                         ]
                     }
@@ -389,6 +383,8 @@ workflow PIPELINE_INITIALISATION {
                             def match = matchFilesToDWI(
                                 dwi_json_list[idx],
                                 nii,
+                                [],
+                                [],
                                 candidate.json       // JSON file
                             )
 
@@ -405,7 +401,9 @@ workflow PIPELINE_INITIALISATION {
                             def match = matchFilesToDWI(
                                 dwi_json_list[idx],
                                 nii,
-                                candidate.json       // JSON file
+                                [],
+                                [],
+                                candidate.json  // JSON file
                             )
 
                             if (match.matched) {
@@ -438,23 +436,15 @@ workflow PIPELINE_INITIALISATION {
                             aparc_aseg,
                             [nii, dwi_bval_list[idx], dwi_bvec_list[idx]],
                             [],
-                            sbref_split.same
-                                    ? sbref_split.same[0].nii
-                                    : (epi_split.same
-                                        ? epi_split.same[0].nii
-                                        : []),
-                            sbref_split.opposite
-                                    ? sbref_split.opposite[0].nii
-                                    : (epi_split.opposite
-                                        ? epi_split.opposite[0].nii
-                                        : []),
+                            sbref_split?.same?.first()?.nii ?: epi_split?.same?.first()?.nii ?: [],
+                            sbref_split?.opposite?.first()?.nii ?: epi_split?.opposite?.first()?.nii ?: [],
                             []
                         ]
                     }
                 }
                 else {
                     // No DWI
-                    error "ERROR: No DWI found for this BIDS dataset: $input. Please validate your BIDS dataset."
+                    log.warn "No DWI found for this subject id: ${id} ${ses ? "and session: " + ses : ""}. Skipping."
                 }
 
                 // ** Save the logs into ${params.outdir}/pipeline_info/BIDS_logs.txt ** //
@@ -511,7 +501,7 @@ workflow PIPELINE_INITIALISATION {
     }
 
     emit:
-        input_bids      = ch_inputs
+        inputs          = ch_inputs
         versions        = ch_versions
 }
 
@@ -647,11 +637,13 @@ def areOppositePhaseEncoding(Map results, Map json1, Map json2) {
 //
 // Function to match sbref and epi files to DWI
 //
-def matchFilesToDWI(Map dwiJson, dwiFilename, Map assocJson) {
+def matchFilesToDWI(Map dwiJson, dwiFilename, Map revJson, revFilename, Map assocJson) {
     def result = [matched: false, warnings: []]
 
     def dwiName = (dwiFilename instanceof Path ? dwiFilename.name :
                     dwiFilename.toString().split('/')[-1])
+    def revName = revFilename?.with {
+        it instanceof Path ? it.name : it.toString().split('/')[-1]}
 
     // Trying to find a match between B0FieldSource and B0FieldIdentifier
     def dwiFieldSource = dwiJson?.B0FieldSource
@@ -679,14 +671,36 @@ def matchFilesToDWI(Map dwiJson, dwiFilename, Map assocJson) {
         }
     }
 
+    // Check in the reverse DWI file, if present, for B0FieldSource and B0FieldIdentifier
+    if (revJson) {
+        def revFieldSource = revJson?.B0FieldSource
+        def revFieldId = revJson?.B0FieldIdentifier
+
+        if (revFieldSource && assocFieldId) {
+            if (normalizeToList(revFieldSource).intersect(normalizeToList(assocFieldId))) {
+                result.matched = true
+            } else {
+                result.warnings << "Reverse B0FieldSource and B0FieldIdentifier do not match: ${revFieldSource} vs ${assocFieldId}. Cannot determine if they are opposite."
+                return result
+            }
+        }
+
+        if (revFieldId && assocFieldSource) {
+            if (normalizeToList(revFieldId).intersect(normalizeToList(assocFieldSource))) {
+                result.matched = true
+            } else {
+                result.warnings << "Reverse B0FieldIdentifier and B0FieldSource do not match: ${revFieldId} vs ${assocFieldSource}. Cannot determine if they are opposite."
+                return result
+            }
+        }
+    }
+
     // If no B0Field* are present, check for IntendedFor
     def intendedFor = assocJson?.IntendedFor
     if (intendedFor) {
-        def matches = intendedFor.any { target ->
+        def matches = normalizeToList(intendedFor).any { target ->
             def targetName = target.toString().replaceAll("^bids::", "").split('/')[-1]
-
-            // target name must match the DWI filename
-            return targetName == dwiName
+            targetName == dwiName || targetName == revName
         }
 
         if ( matches ) {
@@ -697,6 +711,7 @@ def matchFilesToDWI(Map dwiJson, dwiFilename, Map assocJson) {
     }
     return result
 }
+
 
 //
 // Function sort if matched sbref/epi files are the same direction as the main DWI or not.
@@ -753,29 +768,25 @@ def getFreeSurferParcellations(fs_dir, id, ses=null, lo) {
     candidates << "${id}"
     fs_log << "Candidates: ${candidates}"
 
-    // Case 1: fs_dir already points to a subject directory
+    // fs_dir points to a SUBJECTS_DIR containing all Freesurfer subjects
     def subject_dir = null
     if (candidates.any { fs_path.name == it }) {
-        subject_dir = fs_path
-    }
-    else {
-        // Case 2: fs_dir is a SUBJECTS_DIR containing the subject
         fs_log << "Looking for FreeSurfer subject directory in: ${fs_path}"
         subject_dir = candidates
             .collect { file("${fs_path}/${it}") }
             .find { it.exists() }
+        fs_log << "Found FreeSurfer subject directory: ${subject_dir}"
     }
-
-    fs_log << "Found FreeSurfer subject directory: ${subject_dir}"
+    else {
+        fs_log << "No Freesurfer subject directory found in: ${fs_path}"
+    }
 
     if (!subject_dir) {
         return [null, null]
     }
 
-    def mri_dir = file("${subject_dir}/mri")
-
-    def aparc_aseg = file("${mri_dir}/aparc+aseg.mgz")
-    def wmparc = file("${mri_dir}/wmparc.mgz")
+    def aparc_aseg = file("${subject_dir}/mri/aparc+aseg.mgz")
+    def wmparc = file("${subject_dir}/mri/wmparc.mgz")
     fs_log << "aparc+aseg.mgz exists: ${aparc_aseg.exists()}"
     fs_log << "wmparc.mgz exists: ${wmparc.exists()}"
 

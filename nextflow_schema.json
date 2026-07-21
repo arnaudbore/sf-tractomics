@@ -16,7 +16,7 @@
                 "input": {
                     "mimetype": "text/csv",
                     "description": "Path to a BIDS database or samplesheet.",
-                    "help_text": "BIDS database or samplesheet",
+                    "help_text": "BIDS database or samplesheet. Optionally, add a .bidsignore file to the dataset root to exclude files from the analysis.",
                     "fa_icon": "fas fa-folder-open",
                     "exists": true,
                     "type": "string",
@@ -77,20 +77,10 @@
                     "help_text": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
                     "hidden": true
                 },
-                "participants_tsv": {
-                    "type": "string",
-                    "description": "Path to the participants.tsv file.",
-                    "help_text": "Path to the participants.tsv file. If this is not specified, the participants.tsv file will be fetched automatically if the input is a BIDS directory, otherwise no additional covariates will be used."
-                },
                 "participant_label": {
                     "type": "string",
-                    "description": "Comma-separated list of participant labels include in the processing. If specified, only these participants will be processed (unless excluded by 'exclude_participant_label').",
-                    "help_text": "Comma-separated list of participant labels include in the processing. If specified, only these participants will be processed (unless excluded by 'exclude_participant_label')."
-                },
-                "exclude_participant_label": {
-                    "type": "string",
-                    "description": "Comma-separated list of prefixes to exclude from the processing. If specified, participants with labels starting with any of these prefixes will be excluded from processing.",
-                    "help_text": "Comma-separated list of prefixes to exclude from the processing. If specified, participants with labels starting with any of these prefixes will be excluded from processing."
+                    "description": "Comma-separated list of participant ids include in the processing. If specified, only these participants will be processed.",
+                    "help_text": "Participant ids refer to the unique identifiers for each participant in the study. Could be specified without or without session information (e.g. sub-01 or sub-01_ses-01)."
                 },
                 "help": {
                     "type": ["boolean", "string"],
