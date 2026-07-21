@@ -294,8 +294,6 @@ workflow PIPELINE_INITIALISATION {
                         }
 
                         def epi_match = []
-                        println "rev_idx: ${rev_idx}"
-                        println "idx: ${idx}"
                         epi_candidates.each { candidate ->
                             def match = matchFilesToDWI(
                                 primary_json[idx],
@@ -748,12 +746,13 @@ def arePEDirectionOpposite(String pe1, String pe2) {
 //
 // Get file from derivatives freesurfer
 //
-def getFreeSurferParcellations(fs_dir, id, ses=null, lo) {
+def getFreeSurferParcellations(fs_dir, id, ses=null) {
 
     def fs_log = []
 
     if (!fs_dir) {
-        return [null, null]
+        fs_log << "fs_dir is null"
+        return [null, null, fs_log]
     }
 
     def fs_path = file(fs_dir)
@@ -766,15 +765,15 @@ def getFreeSurferParcellations(fs_dir, id, ses=null, lo) {
     }
 
     candidates << "${id}"
-    fs_log << "Candidates: ${candidates}"
+    fs_log << "Candidates: ${candidates}\n"
 
     // fs_dir points to a SUBJECTS_DIR containing all Freesurfer subjects
-    def subject_dir = null
-    if (candidates.any { fs_path.name == it }) {
-        fs_log << "Looking for FreeSurfer subject directory in: ${fs_path}"
-        subject_dir = candidates
-            .collect { file("${fs_path}/${it}") }
-            .find { it.exists() }
+    fs_log << "Looking for FreeSurfer subject directory in: ${fs_path}"
+    def subject_dir = candidates
+        .collect { it -> file("${fs_path}/${it}") }
+        .find { it -> it.exists() }
+
+    if (subject_dir) {
         fs_log << "Found FreeSurfer subject directory: ${subject_dir}"
     }
     else {
@@ -782,7 +781,7 @@ def getFreeSurferParcellations(fs_dir, id, ses=null, lo) {
     }
 
     if (!subject_dir) {
-        return [null, null]
+        return [null, null, fs_log]
     }
 
     def aparc_aseg = file("${subject_dir}/mri/aparc+aseg.mgz")
