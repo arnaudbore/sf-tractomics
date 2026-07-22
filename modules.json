@@ -140,11 +140,6 @@
                         "git_sha": "f2d66a70673d3002965ab9fbd648db7b5b9d4a34",
                         "installed_by": ["preproc_dwi", "preproc_t1"]
                     },
-                    "io/readbids": {
-                        "branch": "main",
-                        "git_sha": "94d1d8546f43881f57c5a209ed857e327dde507a",
-                        "installed_by": ["io_bids"]
-                    },
                     "preproc/eddy": {
                         "branch": "main",
                         "git_sha": "d8b76bf2572247daced80a770df4bd36204480c1",
