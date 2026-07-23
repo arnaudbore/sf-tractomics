@@ -195,7 +195,7 @@ workflow PIPELINE_INITIALISATION {
 
                 // T1w and T2w
                 // ** Note: we don't need the JSON files for T1w/T2w ** //
-                def t1w = item.T1w?.nii ? [item.T1w?.nii] : []
+                def t1w = item.T1w?.nii ? item.T1w?.nii : []
 
                 // TODO fix list of list
                 if ( t1w && t1w.size() > 1 ) {
@@ -383,8 +383,8 @@ workflow PIPELINE_INITIALISATION {
                             def match = matchFilesToDWI(
                                 dwi_json_list[idx],
                                 nii,
-                                [],
-                                [],
+                                [:],
+                                null,
                                 candidate.json       // JSON file
                             )
 
@@ -401,8 +401,8 @@ workflow PIPELINE_INITIALISATION {
                             def match = matchFilesToDWI(
                                 dwi_json_list[idx],
                                 nii,
-                                [],
-                                [],
+                                [:],
+                                null,
                                 candidate.json  // JSON file
                             )
 
@@ -438,11 +438,15 @@ workflow PIPELINE_INITIALISATION {
                             aparc_aseg,
                             [nii, dwi_bval_list[idx], dwi_bvec_list[idx]],
                             [],
-                            sbref_split?.same?.first()?.nii ?: epi_split?.same?.first()?.nii ?: [],
-                            sbref_split?.opposite?.first()?.nii ?: epi_split?.opposite?.first()?.nii ?: [],
+                            sbref_split?.same?.find()?.nii ?: epi_split?.same?.find()?.nii ?: [],
+                            sbref_split?.opposite?.find()?.nii ?: epi_split?.opposite?.find()?.nii ?: [],
                             []
                         ]
                     }
+                }
+                else if (t1w == null || t1w.isEmpty()) {
+                    // No T1w
+                    log.warn "No T1w found for this subject id: ${id} ${ses ? "and session: " + ses : ""}. Skipping."
                 }
                 else {
                     // No DWI
@@ -453,7 +457,7 @@ workflow PIPELINE_INITIALISATION {
                 file("${params.outdir}/pipeline_info/BIDS_logs.txt") << logs.join("\n") + "\n"
 
                 // Add a check that b-values are within the params.dti_max_shell_value and params.fodf_min_shell_value, and if not, throw an error.
-                if ( files[0][4] && !params.dti_shells && !params.fodf_shells && ( params.run_pft_tracking || params.run_local_tracking ) ) {
+                if ( files[0] != null && files[0][4] && !params.dti_shells && !params.fodf_shells && ( params.run_pft_tracking || params.run_local_tracking ) ) {
 
                     def bvals = file(files[0][4][1]).text.trim().split(/\s+/).findAll { it -> it }.collect { it -> it as Double }.toSet()
                         .findAll { it -> !(it >= 0 - params.b0_thr_extract_b0) || !(it <= 0 + params.b0_thr_extract_b0) }
