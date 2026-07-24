@@ -195,7 +195,7 @@ workflow PIPELINE_INITIALISATION {
 
                 // T1w
                 // ** Note: we don't need the JSON files for T1w ** //
-                def t1w = item.T1w?.nii ? item.T1w?.nii : []
+                def t1w = item.T1w?.nii ?: []
 
                 if ( t1w && t1w.size() > 1 ) {
                     logs << "[${id}${ses ? "/" + ses : ""}] Multiple T1w images found. Using the last one for processing. Use .bidsignore to override."
