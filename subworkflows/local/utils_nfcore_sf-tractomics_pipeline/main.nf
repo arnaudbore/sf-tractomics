@@ -193,14 +193,16 @@ workflow PIPELINE_INITIALISATION {
                 def epi_pa = item.epi_full?.pa?.nii ?: []
                 def epi_pa_json = item.epi_full?.pa?.json ?: []
 
-                // T1w and T2w
-                // ** Note: we don't need the JSON files for T1w/T2w ** //
+                // T1w
+                // ** Note: we don't need the JSON files for T1w ** //
                 def t1w = item.T1w?.nii ? item.T1w?.nii : []
 
-                // TODO fix list of list
                 if ( t1w && t1w.size() > 1 ) {
                     logs << "[${id}${ses ? "/" + ses : ""}] Multiple T1w images found. Using the last one for processing. Use .bidsignore to override."
-                    t1w = [t1w[-1]]
+                    t1w = t1w[-1]
+                }
+                else if ( t1w ){
+                    t1w = t1w[0]
                 }
 
                 // Get Freesurfer parcellations if exists
@@ -209,7 +211,11 @@ workflow PIPELINE_INITIALISATION {
 
                 // ** Starting with AP/PA, look if there are multiple runs ** //
                 def files = []
-                if ( use_ap_pa ) {
+                if ( !t1w ) {
+                    // No T1w
+                    log.warn "No T1w found for this subject id: ${id} ${ses ? "and session: " + ses : ""}. Skipping."
+                }
+                else if ( use_ap_pa ) {
                     // ** We might get only one of the two, so assume AP by default, if absent, use PA ** //
                     def primary_nii = []
                     def primary_json = []
@@ -321,15 +327,15 @@ workflow PIPELINE_INITIALISATION {
 
                         files << [
                             [id: id,
-                             session: ses ?: "",
-                             run: run_id,
-                             readout: readout,
-                             pe: pe_check.pe,
-                             age: item.meta.age,
-                             sex: (item.meta.sex == "M" ? 1 : item.meta.sex == "F" ? 2 : 0),
-                             handedness: item.meta.handedness == "right" ? 1 : "left",
-                             disease: item.meta.disease,
-                             site: item.meta.site],
+                                session: ses ?: "",
+                                run: run_id,
+                                readout: readout,
+                                pe: pe_check.pe,
+                                age: item.meta.age,
+                                sex: (item.meta.sex == "M" ? 1 : item.meta.sex == "F" ? 2 : 0),
+                                handedness: item.meta.handedness == "right" ? 1 : "left",
+                                disease: item.meta.disease,
+                                site: item.meta.site],
                             t1w,
                             wmparc,
                             aparc_aseg,
@@ -443,10 +449,6 @@ workflow PIPELINE_INITIALISATION {
                             []
                         ]
                     }
-                }
-                else if (t1w == null || t1w.isEmpty()) {
-                    // No T1w
-                    log.warn "No T1w found for this subject id: ${id} ${ses ? "and session: " + ses : ""}. Skipping."
                 }
                 else {
                     // No DWI
