@@ -331,15 +331,15 @@ workflow PIPELINE_INITIALISATION {
 
                         files << [
                             [id: id,
-                                session: ses ?: "",
-                                run: run_id,
-                                readout: readout,
-                                pe: pe_check.pe,
-                                age: item.meta.age,
-                                sex: (item.meta.sex == "M" ? 1 : item.meta.sex == "F" ? 2 : 0),
-                                handedness: item.meta.handedness == "right" ? 1 : "left",
-                                disease: item.meta.disease,
-                                site: item.meta.site],
+                            session: ses ?: "",
+                            run: run_id,
+                            readout: readout,
+                            pe: pe_check.pe,
+                            age: item.meta.age,
+                            sex: (item.meta.sex == "M" ? 1 : item.meta.sex == "F" ? 2 : 0),
+                            handedness: item.meta.handedness == "right" ? 1 : "left",
+                            disease: item.meta.disease,
+                            site: item.meta.site],
                             t1w,
                             wmparc,
                             aparc_aseg,
@@ -434,15 +434,15 @@ workflow PIPELINE_INITIALISATION {
 
                         files << [
                             [id: id,
-                                session: ses ?: "",
-                                run: run_id,
-                                readout: readout,
-                                pe: pe,
-                                age: item.meta.age,
-                                sex: (item.meta.sex == "M" ? 1 : item.meta.sex == "F" ? 2 : 0),
-                                handedness: item.meta.handedness == "right" ? 1 : "left",
-                                disease: item.meta.disease,
-                                site: item.meta.site],
+                            session: ses ?: "",
+                            run: run_id,
+                            readout: readout,
+                            pe: pe,
+                            age: item.meta.age,
+                            sex: (item.meta.sex == "M" ? 1 : item.meta.sex == "F" ? 2 : 0),
+                            handedness: item.meta.handedness == "right" ? 1 : "left",
+                            disease: item.meta.disease,
+                            site: item.meta.site],
                             t1w,
                             wmparc,
                             aparc_aseg,
@@ -511,6 +511,8 @@ workflow PIPELINE_INITIALISATION {
                 }
         }
     }
+
+    ch_inputs.ifEmpty { error "ERROR: No valid input files found. Please check your input directory or samplesheet." }
 
     emit:
         inputs          = ch_inputs
