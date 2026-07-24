@@ -508,6 +508,8 @@ workflow PIPELINE_INITIALISATION {
         }
     }
 
+    ch_inputs.ifEmpty { error "ERROR: No valid input files found. Please check your input directory or samplesheet." }
+
     emit:
         inputs          = ch_inputs
         versions        = ch_versions
