@@ -62,6 +62,12 @@
                     "fa_icon": "fas fa-folder-open",
                     "help_text": "Check BIDS derivatives."
                 },
+                "gpu_type": {
+                    "type": "string",
+                    "description": "Type of GPU models (or MIG) to use when submitting GPU jobs to HPC clusters using `-profile slurm,gpu`. This should not be needed outside of HPC environments.",
+                    "fa_icon": "fas fa-microchip",
+                    "hidden": false
+                },
                 "email": {
                     "type": "string",
                     "description": "Email address for completion summary.",
