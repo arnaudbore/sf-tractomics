@@ -107,6 +107,10 @@ workflow PIPELINE_INITIALISATION {
         nextflow_cli_args
     )
 
+    if (workflow.profile.contains('gpu') && !params.gpu_type) {
+        error "When using the 'gpu' profile, you must specify --gpu_type (e.g. h100 or a100)."
+    }
+
     //
     // Create channel from input file provided through params.input
     //
