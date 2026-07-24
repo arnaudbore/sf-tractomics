@@ -1,7 +1,8 @@
 loop_over: [subject, session, run]
 
 T1w:
-  plain_set: {}
+  sequential_set:
+    by_entity: "run"
 
 dwi:
   sequential_set:

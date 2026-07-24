@@ -193,14 +193,16 @@ workflow PIPELINE_INITIALISATION {
                 def epi_pa = item.epi_full?.pa?.nii ?: []
                 def epi_pa_json = item.epi_full?.pa?.json ?: []
 
-                // T1w and T2w
-                // ** Note: we don't need the JSON files for T1w/T2w ** //
-                def t1w = item.T1w?.nii ? [item.T1w?.nii] : []
+                // T1w
+                // ** Note: we don't need the JSON files for T1w ** //
+                def t1w = item.T1w?.nii ?: []
 
-                // TODO fix list of list
                 if ( t1w && t1w.size() > 1 ) {
                     logs << "[${id}${ses ? "/" + ses : ""}] Multiple T1w images found. Using the last one for processing. Use .bidsignore to override."
-                    t1w = [t1w[-1]]
+                    t1w = t1w[-1]
+                }
+                else if ( t1w ){
+                    t1w = t1w[0]
                 }
 
                 // Get Freesurfer parcellations if exists
@@ -209,7 +211,11 @@ workflow PIPELINE_INITIALISATION {
 
                 // ** Starting with AP/PA, look if there are multiple runs ** //
                 def files = []
-                if ( use_ap_pa ) {
+                if ( !t1w ) {
+                    // No T1w
+                    log.warn "No T1w found for this subject id: ${id} ${ses ? "and session: " + ses : ""}. Skipping."
+                }
+                else if ( use_ap_pa ) {
                     // ** We might get only one of the two, so assume AP by default, if absent, use PA ** //
                     def primary_nii = []
                     def primary_json = []
@@ -321,15 +327,15 @@ workflow PIPELINE_INITIALISATION {
 
                         files << [
                             [id: id,
-                             session: ses ?: "",
-                             run: run_id,
-                             readout: readout,
-                             pe: pe_check.pe,
-                             age: item.meta.age,
-                             sex: (item.meta.sex == "M" ? 1 : item.meta.sex == "F" ? 2 : 0),
-                             handedness: item.meta.handedness == "right" ? 1 : "left",
-                             disease: item.meta.disease,
-                             site: item.meta.site],
+                            session: ses ?: "",
+                            run: run_id,
+                            readout: readout,
+                            pe: pe_check.pe,
+                            age: item.meta.age,
+                            sex: (item.meta.sex == "M" ? 1 : item.meta.sex == "F" ? 2 : 0),
+                            handedness: item.meta.handedness == "right" ? 1 : "left",
+                            disease: item.meta.disease,
+                            site: item.meta.site],
                             t1w,
                             wmparc,
                             aparc_aseg,
@@ -383,8 +389,8 @@ workflow PIPELINE_INITIALISATION {
                             def match = matchFilesToDWI(
                                 dwi_json_list[idx],
                                 nii,
-                                [],
-                                [],
+                                [:],
+                                null,
                                 candidate.json       // JSON file
                             )
 
@@ -401,8 +407,8 @@ workflow PIPELINE_INITIALISATION {
                             def match = matchFilesToDWI(
                                 dwi_json_list[idx],
                                 nii,
-                                [],
-                                [],
+                                [:],
+                                null,
                                 candidate.json  // JSON file
                             )
 
@@ -424,22 +430,22 @@ workflow PIPELINE_INITIALISATION {
 
                         files << [
                             [id: id,
-                                session: ses ?: "",
-                                run: run_id,
-                                readout: readout,
-                                pe: pe,
-                                age: item.meta.age,
-                                sex: (item.meta.sex == "M" ? 1 : item.meta.sex == "F" ? 2 : 0),
-                                handedness: item.meta.handedness == "right" ? 1 : "left",
-                                disease: item.meta.disease,
-                                site: item.meta.site],
+                            session: ses ?: "",
+                            run: run_id,
+                            readout: readout,
+                            pe: pe,
+                            age: item.meta.age,
+                            sex: (item.meta.sex == "M" ? 1 : item.meta.sex == "F" ? 2 : 0),
+                            handedness: item.meta.handedness == "right" ? 1 : "left",
+                            disease: item.meta.disease,
+                            site: item.meta.site],
                             t1w,
                             wmparc,
                             aparc_aseg,
                             [nii, dwi_bval_list[idx], dwi_bvec_list[idx]],
                             [],
-                            sbref_split?.same?.first()?.nii ?: epi_split?.same?.first()?.nii ?: [],
-                            sbref_split?.opposite?.first()?.nii ?: epi_split?.opposite?.first()?.nii ?: [],
+                            sbref_split?.same?.find()?.nii ?: epi_split?.same?.find()?.nii ?: [],
+                            sbref_split?.opposite?.find()?.nii ?: epi_split?.opposite?.find()?.nii ?: [],
                             []
                         ]
                     }
@@ -453,7 +459,7 @@ workflow PIPELINE_INITIALISATION {
                 file("${params.outdir}/pipeline_info/BIDS_logs.txt") << logs.join("\n") + "\n"
 
                 // Add a check that b-values are within the params.dti_max_shell_value and params.fodf_min_shell_value, and if not, throw an error.
-                if ( files[0][4] && !params.dti_shells && !params.fodf_shells && ( params.run_pft_tracking || params.run_local_tracking ) ) {
+                if ( files[0] != null && files[0][4] && !params.dti_shells && !params.fodf_shells && ( params.run_pft_tracking || params.run_local_tracking ) ) {
 
                     def bvals = file(files[0][4][1]).text.trim().split(/\s+/).findAll { it -> it }.collect { it -> it as Double }.toSet()
                         .findAll { it -> !(it >= 0 - params.b0_thr_extract_b0) || !(it <= 0 + params.b0_thr_extract_b0) }
@@ -501,6 +507,8 @@ workflow PIPELINE_INITIALISATION {
                 }
         }
     }
+
+    ch_inputs.ifEmpty { error "ERROR: No valid input files found. Please check your input directory or samplesheet." }
 
     emit:
         inputs          = ch_inputs
