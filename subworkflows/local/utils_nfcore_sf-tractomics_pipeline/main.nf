@@ -336,9 +336,9 @@ workflow PIPELINE_INITIALISATION {
                             readout: readout,
                             pe: pe_check.pe,
                             age: item.meta.age,
-                            sex: (item.meta.sex == "M" ? 1 : item.meta.sex == "F" ? 2 : 0),
-                            handedness: item.meta.handedness == "right" ? 1 : "left",
-                            disease: item.meta.disease,
+                            sex: item.meta.sex ? (item.meta.sex?.toLowerCase().contains("f") ? 2 : item.meta.sex.toLowerCase().contains("m") ? 1 : 0) : 0,
+                            handedness: item.meta.handedness ? (item.meta.handedness?.toLowerCase().contains("r") ? 1 : item.meta.handedness?.toLowerCase().contains("l") ? 2 : "NA") : "NA",
+                            disease: item.meta.disease ?: "HC",
                             site: item.meta.site],
                             t1w,
                             wmparc,
@@ -439,9 +439,9 @@ workflow PIPELINE_INITIALISATION {
                             readout: readout,
                             pe: pe,
                             age: item.meta.age,
-                            sex: (item.meta.sex == "M" ? 1 : item.meta.sex == "F" ? 2 : 0),
-                            handedness: item.meta.handedness == "right" ? 1 : "left",
-                            disease: item.meta.disease,
+                            sex: item.meta.sex ? (item.meta.sex?.toLowerCase().contains("f") ? 2 : item.meta.sex.toLowerCase().contains("m") ? 1 : 0) : 0,
+                            handedness: item.meta.handedness ? (item.meta.handedness?.toLowerCase().contains("r") ? 1 : item.meta.handedness?.toLowerCase().contains("l") ? 2 : "NA") : "NA",
+                            disease: item.meta.disease ?: "HC",
                             site: item.meta.site],
                             t1w,
                             wmparc,
@@ -486,7 +486,7 @@ workflow PIPELINE_INITIALISATION {
                             "Alternatively, you can decrease this threshold using --fodf_min_shell_value."
                     }
                 }
-
+                println files
                 return files
             }
         }
