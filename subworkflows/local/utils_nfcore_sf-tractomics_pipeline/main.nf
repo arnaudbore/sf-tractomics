@@ -486,7 +486,6 @@ workflow PIPELINE_INITIALISATION {
                             "Alternatively, you can decrease this threshold using --fodf_min_shell_value."
                     }
                 }
-                println files
                 return files
             }
         }
