@@ -1106,12 +1106,13 @@
                 },
                 "harmonization_regul_ref": {
                     "type": "number",
+                    "default": 0,
                     "description": "Regularization parameter for the reference site data.",
                     "help_text": "Regularization parameter for the reference site data."
                 },
                 "harmonization_regul_mov": {
                     "type": "number",
-                    "default": 0,
+                    "default": -1,
                     "description": "Regularization parameter for the moving site data. Set to '-1' for automatic tuning [default=0 for pairwise; -1 for clinical].",
                     "help_text": "Regularization parameter for the moving site data. Set to '-1' for automatic tuning [default=0 for pairwise; -1 for clinical]"
                 },
