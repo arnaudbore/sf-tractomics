@@ -276,11 +276,10 @@ workflow SF_TRACTOMICS {
         // while keeping the header from the first
         // file only and skipping it in the rest.
         ch_collection_mean_input = ATLAS_ROIMETRICS.out.stats_tab_mean
+        ch_collection_mean_input = collectStatsFiles(ch_collection_mean_input, "space-native_atlas-iit_label-mean_desc-roi_stats.tsv", "${params.outdir}/metrics/")
+        ch_global_multiqc_files = ch_global_multiqc_files.mix(ch_collection_mean_input)
 
         if ( params.harmonization_reference ) {
-            ch_collection_mean_input = collectStatsFiles(ch_collection_mean_input, "space-native_atlas-iit_label-mean_desc-roi_stats.tsv", "${params.outdir}/metrics/")
-            ch_global_multiqc_files = ch_global_multiqc_files.mix(ch_collection_mean_input)
-
             // The QC expects the harmonization reference to have the following pattern: *.reference.tsv
             // So we copy the file in the workflow workdir with the expected name pattern. If the file
             // already has the expected name pattern, this step will simply create a copy of the file.
