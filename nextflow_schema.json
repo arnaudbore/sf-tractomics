@@ -1132,6 +1132,13 @@
                     "type": "boolean",
                     "description": "If set, exclude reference site subjects with age outside the range of the moving site subject ages.",
                     "help_text": "If set, exclude reference site subjects with age outside the range of the moving site subject ages."
+                },
+                "harmonization_method": {
+                    "type": "string",
+                    "default": "clinical",
+                    "description": "Harmonization method to use.",
+                    "help_text": "Methods available: clinical uses a priori from the reference site to fit the moving site, pairwise uses both moving and reference data to fit the covariates regression parameters (Beta_mov).",
+                    "enum": ["clinical", "pairwise"]
                 }
             },
             "help_text": "Parameters to configure the harmonization subworkflow."
