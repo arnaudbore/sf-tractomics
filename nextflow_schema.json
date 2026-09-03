@@ -1102,7 +1102,7 @@
                     "type": "boolean",
                     "default": false,
                     "description": "If set, ignore the handedness covariate in the data. If there is only one value in the column, the variable is ignored by the model.",
-                    "help_text": "If set, ignore the handedness covariate in the data."
+                    "help_text": "If set, ignore the handedness covariate in the data. If there is only one value in the column, the variable is ignored by the model."
                 },
                 "harmonization_regul_ref": {
                     "type": "number",
