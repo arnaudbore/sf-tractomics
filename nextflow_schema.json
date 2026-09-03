@@ -1095,7 +1095,7 @@
                 "harmonization_ignore_sex": {
                     "type": "boolean",
                     "default": false,
-                    "description": "If set, ignore the sex covariate in the data.",
+                    "description": "If set, ignore the sex covariate in the data. If there is only one value in the column, the variable is ignored by the model.",
                     "help_text": "If set, ignore the sex covariate in the data."
                 },
                 "harmonization_ignore_handedness": {
