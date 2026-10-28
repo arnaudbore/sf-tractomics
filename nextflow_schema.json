@@ -275,7 +275,7 @@
             "properties": {
                 "run_t1_denoising": {
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "Run T1 denoising.",
                     "help_text": "Run T1 denoising."
                 },
