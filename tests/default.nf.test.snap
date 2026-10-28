@@ -20,9 +20,6 @@
                 "DENOISE_DWI": {
                     "mrtrix": "3.0.5"
                 },
-                "DENOISING_NLMEANS": {
-                    "scilpy": "2.2.2"
-                },
                 "FW_CORRECTED_DTIMETRICS": {
                     "scilpy": "2.2.2",
                     "mrtrix": "3.0.7",
@@ -32,6 +29,10 @@
                     "mrtrix": "3.0.5"
                 },
                 "MASK_T2W": {
+                    "mrtrix": "3.0.5"
+                },
+                "PREPROC_N4": {
+                    "ants": null,
                     "mrtrix": "3.0.5"
                 },
                 "RECONST_DTIMETRICS": {
@@ -223,6 +224,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-07-22T09:47:55.911963367"
+        "timestamp": "2026-10-28T09:20:07.911711568"
     }
 }
